@@ -1,0 +1,60 @@
+﻿@model Sistema_Integrado_de_Registro.Models.Institution
+
+@{
+    ViewData["Title"] = "institución";
+}
+
+<h2>Registro de Institución</h2>
+
+<div id="mensaje"></div>
+
+<form id="formInstitucion">
+    <input type="hidden" name="id" />
+
+    <div class="mb-2">
+        <label>Nombre</label>
+        <input type="text" name="nombre" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Nombre Director</label>
+        <input type="text" name="nombreDirector" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Identificación Director</label>
+        <input type="text" name="identificacionDirector" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Dirección</label>
+        <input type="text" name="direccion" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Teléfono</label>
+        <input type="text" name="telefono" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+<hr />
+
+<h3>Instituciones registradas</h3>
+<table class="table-bordered table" id="tablaInstituciones">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Director</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+@section Scripts {
+    <script src="~/js/institution.js"></script>
+}

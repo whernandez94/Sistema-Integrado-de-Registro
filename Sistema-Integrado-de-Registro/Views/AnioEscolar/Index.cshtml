@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Años Escolares";
+}
+
+<h2>Años Escolares</h2>
+
+<form id="formAnioEscolar">
+    <input type="hidden" name="id" />
+    <div class="mb-3">
+        <label for="anio" class="form-label">Año Escolar (formato: 2024-2025)</label>
+        <input type="text" name="anio" class="form-control" required pattern="^\d{4}-\d{4}$" />
+        <div class="invalid-feedback">Ingrese un año válido (ej: 2024-2025).</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+<hr />
+
+<table class="table-bordered table" id="tablaAnios">
+    <thead>
+        <tr>
+            <th>Año</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/anioEscolar.js"></script>
+}
