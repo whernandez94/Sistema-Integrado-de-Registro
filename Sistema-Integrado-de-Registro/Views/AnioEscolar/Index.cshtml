@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Años Escolares";
+}
+
+<div class="d-flex">
+    <div class="justify-content-end">
+        <button class="btn btn-success mb-3" onclick="abrirFormulario()">Agregar nuevo año escolar</button>
+    </div>
+</div>
+
+<!-- DataTale -->
+<div class="card mb-4 shadow">
+    <div class="card-header py-3">
+        <h6 class="font-weight-bold text-primary m-0">Años Escolares</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table-bordered table" id="tablaAnios" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Año</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAnioEscolar" tabindex="-1" aria-labelledby="modalAnioEscolarLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAnioEscolarLabel">Año Escolar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modalAnioEscolarBody">
+                @await Html.PartialAsync("_Form", new Sistema_Integrado_de_Registro.Models.AnioEscolar())
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/anioEscolar.js"></script>
+}
