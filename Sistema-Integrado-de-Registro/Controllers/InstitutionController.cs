@@ -63,5 +63,24 @@ namespace Sistema_Integrado_de_Registro.Controllers
 
             return Ok(new { message = "Eliminado correctamente" });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Form(int? id)
+        {
+            Institution modelo;
+
+            if (id == null || id == 0)
+            {
+                modelo = new Institution();
+            }
+            else
+            {
+                modelo = await _context.Instituciones.FindAsync(id);
+                if (modelo == null)
+                    return NotFound();
+            }
+
+            return PartialView("_Form", modelo);
+        }
     }
 }

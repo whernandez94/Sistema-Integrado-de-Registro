@@ -4,56 +4,50 @@
     ViewData["Title"] = "institución";
 }
 
-<h2>Registro de Institución</h2>
-
-<div id="mensaje"></div>
-
-<form id="formInstitucion">
-    <input type="hidden" name="id" />
-
-    <div class="mb-2">
-        <label>Nombre</label>
-        <input type="text" name="nombre" class="form-control" />
+<div class="d-flex">
+    <div class="justify-content-end">
+        <button class="btn btn-success mb-3" id="btnNuevo">Agregar nueva institucion</button>
     </div>
-    <div class="mb-2">
-        <label>Nombre Director</label>
-        <input type="text" name="nombreDirector" class="form-control" />
-    </div>
-    <div class="mb-2">
-        <label>Identificación Director</label>
-        <input type="text" name="identificacionDirector" class="form-control" />
-    </div>
-    <div class="mb-2">
-        <label>Dirección</label>
-        <input type="text" name="direccion" class="form-control" />
-    </div>
-    <div class="mb-2">
-        <label>Teléfono</label>
-        <input type="text" name="telefono" class="form-control" />
-    </div>
-    <div class="mb-2">
-        <label>Email</label>
-        <input type="email" name="email" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+</div>
 
-<hr />
+<!-- DataTale -->
+<div class="card mb-4 shadow">
+    <div class="card-header py-3">
+        <h6 class="font-weight-bold text-primary m-0">Instituciones registradas</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table-bordered table" id="tablaInstituciones" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Director</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<h3>Instituciones registradas</h3>
-<table class="table-bordered table" id="tablaInstituciones">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Director</th>
-            <th>Teléfono</th>
-            <th>Email</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-
+<!-- Modal -->
+<div class="modal fade" id="modalInstitucion" tabindex="-1" aria-labelledby="modalInstitucionLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalInstitucionLabel">Institucion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modalIntitucionesBody">
+                @await Html.PartialAsync("_Form", new Sistema_Integrado_de_Registro.Models.Institution())
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="~/js/institution.js"></script>

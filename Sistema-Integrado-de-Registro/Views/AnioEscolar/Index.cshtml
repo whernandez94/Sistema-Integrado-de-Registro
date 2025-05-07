@@ -2,30 +2,49 @@
     ViewData["Title"] = "Años Escolares";
 }
 
-<h2>Años Escolares</h2>
-
-<form id="formAnioEscolar">
-    <input type="hidden" name="id" />
-    <div class="mb-3">
-        <label for="anio" class="form-label">Año Escolar (formato: 2024-2025)</label>
-        <input type="text" name="anio" class="form-control" required pattern="^\d{4}-\d{4}$" />
-        <div class="invalid-feedback">Ingrese un año válido (ej: 2024-2025).</div>
+<div class="d-flex">
+    <div class="justify-content-end">
+        <button class="btn btn-success mb-3" onclick="abrirFormulario()">Agregar nuevo año escolar</button>
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+</div>
 
-<hr />
+<!-- DataTale -->
+<div class="card mb-4 shadow">
+    <div class="card-header py-3">
+        <h6 class="font-weight-bold text-primary m-0">Años Escolares</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table-bordered table" id="tablaAnios" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Año</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<table class="table-bordered table" id="tablaAnios">
-    <thead>
-        <tr>
-            <th>Año</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+<!-- Modal -->
+<div class="modal fade" id="modalAnioEscolar" tabindex="-1" aria-labelledby="modalAnioEscolarLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAnioEscolarLabel">Año Escolar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modalAnioEscolarBody">
+                @await Html.PartialAsync("_Form", new Sistema_Integrado_de_Registro.Models.AnioEscolar())
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <script src="~/js/anioEscolar.js"></script>

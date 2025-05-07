@@ -87,5 +87,25 @@ namespace Sistema_Integrado_de_Registro.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Form(int? id)
+        {
+            AnioEscolar modelo;
+
+            if (id == null || id == 0)
+            {
+                modelo = new AnioEscolar();
+            }
+            else
+            {
+                modelo = await _context.AniosEscolares.FindAsync(id);
+                if (modelo == null)
+                    return NotFound();
+            }
+
+            return PartialView("_Form", modelo);
+        }
+
     }
 }
