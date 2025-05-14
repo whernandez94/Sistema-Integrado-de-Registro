@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Control de Asignaturas";
+}
+
+<div class="d-flex">
+    <div class="justify-content-end">
+        <button class="btn btn-success mb-3" id="btnNuevo">Nueva Asignatura</button>
+    </div>
+</div>
+
+<!-- DataTale -->
+<div class="card mb-4 shadow">
+    <div class="card-header py-3">
+        <h6 class="font-weight-bold text-primary m-0">Asignaturas registradas</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table-bordered table" id="tablaAsignaturas" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>% Inasistencias</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAsignatura" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="formAsignatura" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Asignatura</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="id" />
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="porcentajeInasistencia" class="form-label">% Inasistencia</label>
+                    <input type="number" name="porcentajeInasistencia" class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/asignatura.js"></script>
+}

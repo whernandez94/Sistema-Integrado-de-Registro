@@ -1,0 +1,59 @@
+﻿@model Seccion
+
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFormLabel">@(Model.Id == 0 ? "Nueva Sección" : "Editar Sección")</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formSeccion">
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-control" required />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Grado" class="form-label"></label>
+                        <select asp-for="Grado" class="form-control" required>
+                            <option value="">Seleccione un grado</option>
+                            @foreach (var grado in ViewBag.Grados)
+                            {
+                                <option value="@grado">Grado @grado</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Grado" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="AnioEscolarId" class="form-label"></label>
+                        <select asp-for="AnioEscolarId" class="form-control" required>
+                            <option value="">Seleccione un año escolar</option>
+                            @foreach (var item in ViewBag.AniosEscolares)
+                            {
+                                <option value="@item.Id">@item.Anio</option>
+                            }
+                        </select>
+                        <span asp-validation-for="AnioEscolarId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="DocenteId" class="form-label"></label>
+                        <select asp-for="DocenteId" class="form-control" required>
+                            <option value="">Seleccione un docente guía</option>
+                            @foreach (var item in ViewBag.Docentes)
+                            {
+                                <option value="@item.Id">@item.Nombre @item.Apellido</option>
+                            }
+                        </select>
+                        <span asp-validation-for="DocenteId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

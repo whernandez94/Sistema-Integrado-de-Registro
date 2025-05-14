@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Gestión de Secciones";
+}
+
+<div class="container-fluid">
+    <div class="card mb-4 shadow">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <h6 class="font-weight-bold text-primary m-0">@ViewData["Title"]</h6>
+            <div>
+                <button id="btnNuevo" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Nueva Sección
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tblSecciones" class="table-bordered table" width="100%" cellspacing="0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Grado</th>
+                            <th>Año Escolar</th>
+                            <th>Docente Guía</th>
+                            <th>Estudiantes</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_Form" />
+<partial name="_ListadoImpresion" />
+
+@section Scripts {
+    <script src="~/js/secciones.js"></script>
+}

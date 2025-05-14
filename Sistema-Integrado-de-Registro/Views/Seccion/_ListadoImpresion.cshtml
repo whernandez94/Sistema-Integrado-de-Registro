@@ -1,0 +1,63 @@
+﻿@model SeccionDetalleDto
+
+<div class="container p-4">
+    <div class="mb-4 text-center">
+        <h3>Listado de Estudiantes - Sección @Model.Nombre</h3>
+        <h5>Grado @Model.Grado - Año Escolar @Model.AnioEscolar</h5>
+        <p>Docente Guía: @Model.DocenteGuia</p>
+        <p class="text-muted">Fecha: @DateTime.Now.ToString("dd/MM/yyyy")</p>
+    </div>
+
+    <table class="table-bordered table">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Cédula</th>
+                <th>Nombre Completo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Estudiantes.Count; i++)
+            {
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@Model.Estudiantes[i].Cedula</td>
+                    <td>@Model.Estudiantes[i].NombreCompleto</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-4 text-end">
+        <p>Total de estudiantes: @Model.Estudiantes.Count</p>
+    </div>
+
+    <div class="d-print-none mt-4 text-center">
+        <button class="btn btn-primary" onclick="window.print()">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+        <button class="btn btn-secondary" onclick="window.close()">
+            <i class="fas fa-times"></i> Cerrar
+        </button>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        .d-print-none {
+            display: none !important;
+        }
+        body {
+            padding: 20px;
+            font-size: 12pt;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    }
+</style>

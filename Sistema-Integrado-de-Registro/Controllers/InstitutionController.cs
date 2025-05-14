@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Models;
+using Sistema_Integrado_de_Registro.Services;
 
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     public class InstitutionController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IInstitutionService _service;
 
-        public InstitutionController(AppDbContext context)
+        public InstitutionController(IInstitutionService service)
         {
-            _context = context;
+            _service = service;
         }
 
         public IActionResult Index()
@@ -22,7 +21,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerTodas()
         {
-            var instituciones = await _context.Instituciones.ToListAsync();
+            var instituciones = await _service.GetAllInstitutionsAsync();
             return Json(instituciones);
         }
 
@@ -32,36 +31,29 @@ namespace Sistema_Integrado_de_Registro.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (model.Id == 0)
-                _context.Instituciones.Add(model);
-            else
-                _context.Instituciones.Update(model);
+            var result = await _service.SaveInstitutionAsync(model);
 
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Guardado exitosamente" });
+            return result.Success
+                ? Ok(new { result.Message, Data = result.Data })
+                : BadRequest(result.Message);
         }
 
         [HttpGet]
         public async Task<IActionResult> Obtener(int id)
         {
-            var institucion = await _context.Instituciones.FindAsync(id);
-            if (institucion == null)
-                return NotFound();
-
-            return Json(institucion);
+            var institucion = await _service.GetInstitutionByIdAsync(id);
+            return institucion != null
+                ? Json(institucion)
+                : NotFound();
         }
 
         [HttpDelete]
         public async Task<IActionResult> Eliminar(int id)
         {
-            var institucion = await _context.Instituciones.FindAsync(id);
-            if (institucion == null)
-                return NotFound();
-
-            _context.Instituciones.Remove(institucion);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Eliminado correctamente" });
+            var result = await _service.DeleteInstitutionAsync(id);
+            return result.Success
+                ? Ok(new { result.Message })
+                : BadRequest(result.Message);
         }
 
         [HttpGet]
@@ -75,7 +67,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             }
             else
             {
-                modelo = await _context.Instituciones.FindAsync(id);
+                modelo = await _service.GetInstitutionByIdAsync(id.Value);
                 if (modelo == null)
                     return NotFound();
             }
