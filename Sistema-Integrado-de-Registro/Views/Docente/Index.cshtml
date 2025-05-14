@@ -1,0 +1,41 @@
+﻿<div class="card mb-4 shadow">
+    <div class="card-header d-flex justify-content-between">
+        <h6 class="font-weight-bold text-primary m-0">Personal Docente</h6>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalDocente">Nuevo Docente</button>
+    </div>
+    <div class="card-body">
+        <table class="table-bordered table" id="tablaDocentes">
+            <thead>
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Carga Horas</th>
+                    <th>Asignaturas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDocente" tabindex="-1" aria-labelledby="modalDocenteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDocenteLabel">Registro de Docente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modalDocenteBody">
+                @await Html.PartialAsync("_Form", new Sistema_Integrado_de_Registro.Models.Docente())
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/docente.js"></script>
+}

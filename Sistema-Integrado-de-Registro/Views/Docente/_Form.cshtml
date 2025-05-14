@@ -1,0 +1,53 @@
+﻿@model Sistema_Integrado_de_Registro.Models.Docente
+@inject Sistema_Integrado_de_Registro.Data.AppDbContext db
+
+<form id="formDocente">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label for="cedula" class="form-label">Cédula</label>
+        <input type="text" class="form-control" name="Cedula" value="@Model.Cedula" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" name="Nombre" value="@Model.Nombre" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="apellido" class="form-label">Apellido</label>
+        <input type="text" class="form-control" name="Apellido" value="@Model.Apellido" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input type="text" class="form-control" name="Telefono" value="@Model.Telefono" />
+    </div>
+
+    <div class="mb-3">
+        <label for="correo" class="form-label">Correo</label>
+        <input type="email" class="form-control" name="Correo" value="@Model.Correo" />
+    </div>
+
+    <div class="mb-3">
+        <label for="cargaHoras" class="form-label">Carga de Horas</label>
+        <input type="number" class="form-control" name="CargaHoras" value="@Model.CargaHoras" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Asignaturas" class="form-label">Asignaturas que imparte</label>
+        <select name="Asignaturas" id="Asignaturas" class="form-select" multiple required>
+            @foreach (var asignatura in db.Asignaturas.ToList())
+            {
+                <option value="@asignatura.Id">@asignatura.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div id="mensajeDocente"></div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>
