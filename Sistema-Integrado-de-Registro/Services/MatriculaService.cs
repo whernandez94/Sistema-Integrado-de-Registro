@@ -15,25 +15,13 @@ namespace Sistema_Integrado_de_Registro.Services
             _logger = logger;
         }
 
-        public async Task<List<MatriculaDto>> GetAllMatriculasAsync()
+        public async Task<List<Matricula>> GetAllMatriculasAsync()
         {
             return await _context.Matriculas
                 .Include(m => m.Estudiante)
                 .Include(m => m.Seccion)
                 .Include(m => m.AnioEscolar)
                 .OrderByDescending(m => m.FechaMatricula)
-                .Select(m => new MatriculaDto
-                {
-                    Id = m.Id,
-                    EstudianteNombre = $"{m.Estudiante.Nombre} {m.Estudiante.Apellido}",
-                    EstudianteCedula = m.Estudiante.Cedula,
-                    SeccionNombre = m.Seccion.Nombre,
-                    Grado = m.Seccion.Grado,
-                    AnioEscolar = m.AnioEscolar.Anio,
-                    FechaMatricula = m.FechaMatricula.ToString("dd/MM/yyyy"),
-                    NumeroExpediente = m.NumeroExpediente,
-                    Activa = m.Activa
-                })
                 .ToListAsync();
         }
 
@@ -50,12 +38,11 @@ namespace Sistema_Integrado_de_Registro.Services
         {
             try
             {
-                // Validar que el estudiante no esté ya matriculado en la misma sección/año
                 var existe = await _context.Matriculas
                     .AnyAsync(m => m.EstudianteId == matricula.EstudianteId &&
-                                  m.SeccionId == matricula.SeccionId &&
-                                  m.AnioEscolarId == matricula.AnioEscolarId &&
-                                  m.Id != matricula.Id);
+                                   m.SeccionId == matricula.SeccionId &&
+                                   m.AnioEscolarId == matricula.AnioEscolarId &&
+                                   m.Id != matricula.Id);
 
                 if (existe)
                 {
@@ -66,7 +53,7 @@ namespace Sistema_Integrado_de_Registro.Services
                     };
                 }
 
-                if (string.IsNullOrEmpty(matricula.NumeroExpediente))
+                if (string.IsNullOrWhiteSpace(matricula.NumeroExpediente))
                 {
                     matricula.NumeroExpediente = await GenerarNumeroExpedienteAsync();
                 }
@@ -81,7 +68,12 @@ namespace Sistema_Integrado_de_Registro.Services
                 }
 
                 await _context.SaveChangesAsync();
-                return new ServiceResult { Success = true, Message = "Matrícula guardada correctamente" };
+
+                return new ServiceResult
+                {
+                    Success = true,
+                    Message = "Matrícula guardada correctamente"
+                };
             }
             catch (Exception ex)
             {
@@ -101,12 +93,21 @@ namespace Sistema_Integrado_de_Registro.Services
                 var matricula = await _context.Matriculas.FindAsync(id);
                 if (matricula == null)
                 {
-                    return new ServiceResult { Success = false, Message = "Matrícula no encontrada" };
+                    return new ServiceResult
+                    {
+                        Success = false,
+                        Message = "Matrícula no encontrada"
+                    };
                 }
 
                 _context.Matriculas.Remove(matricula);
                 await _context.SaveChangesAsync();
-                return new ServiceResult { Success = true, Message = "Matrícula eliminada correctamente" };
+
+                return new ServiceResult
+                {
+                    Success = true,
+                    Message = "Matrícula eliminada correctamente"
+                };
             }
             catch (Exception ex)
             {
@@ -158,8 +159,16 @@ namespace Sistema_Integrado_de_Registro.Services
                 return "EXP-000001";
             }
 
-            var numero = int.Parse(ultimoNumero.Split('-')[1]) + 1;
+            var numeroParte = ultimoNumero.Split('-').LastOrDefault();
+
+            if (!int.TryParse(numeroParte, out var numero))
+            {
+                return "EXP-000001";
+            }
+
+            numero++;
             return $"EXP-{numero.ToString().PadLeft(6, '0')}";
         }
     }
+
 }

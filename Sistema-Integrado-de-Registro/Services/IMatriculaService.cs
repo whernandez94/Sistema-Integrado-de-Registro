@@ -4,7 +4,7 @@ namespace Sistema_Integrado_de_Registro.Services
 {
     public interface IMatriculaService
     {
-        Task<List<MatriculaDto>> GetAllMatriculasAsync();
+        Task<List<Matricula>> GetAllMatriculasAsync();
         Task<Matricula?> GetMatriculaByIdAsync(int id);
         Task<ServiceResult> SaveMatriculaAsync(Matricula matricula);
         Task<ServiceResult> DeleteMatriculaAsync(int id);
@@ -13,4 +13,6 @@ namespace Sistema_Integrado_de_Registro.Services
         Task<List<AnioEscolar>> GetAniosEscolaresDisponiblesAsync();
         Task<string> GenerarNumeroExpedienteAsync();
     }
+
+
 }

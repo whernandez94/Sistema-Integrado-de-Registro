@@ -6,12 +6,44 @@
             dataSrc: ''
         },
         columns: [
-            { data: 'estudianteNombre' },
-            { data: 'estudianteCedula' },
-            { data: 'seccionNombre' },
-            { data: 'grado' },
-            { data: 'anioEscolar' },
-            { data: 'fechaMatricula' },
+            {
+                data: 'estudiante',
+                render: function (data) {
+                    if (!data) return '';
+                    return `${data.nombre} ${data.apellido}`;
+                }
+            },
+            {
+                data: 'estudiante',
+                render: function (data) {
+                    return data?.cedula ?? '';
+                }
+            },
+            {
+                data: 'seccion',
+                render: function (data) {
+                    return data?.nombre ?? '';
+                }
+            },
+            {
+                data: 'seccion',
+                render: function (data) {
+                    return data?.grado ?? '';
+                }
+            },
+            {
+                data: 'anioEscolar',
+                render: function (data) {
+                    return data?.anio ?? '';
+                }
+            },
+            {
+                data: 'fechaMatricula',
+                render: function (data) {
+                    if (!data) return '';
+                    return data.split('T')[0]; // formato yyyy-MM-dd
+                }
+            },
             { data: 'numeroExpediente' },
             {
                 data: 'activa',

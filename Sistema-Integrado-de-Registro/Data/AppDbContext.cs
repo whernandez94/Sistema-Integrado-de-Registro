@@ -17,6 +17,7 @@ namespace Sistema_Integrado_de_Registro.Data
         public DbSet<Inasistencia> Inasistencias { get; set; }
         public DbSet<Seccion> Secciones { get; set; }
         public DbSet<Matricula> Matriculas { get; set; }
+        public DbSet<Grado> Grados { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

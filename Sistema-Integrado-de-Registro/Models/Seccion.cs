@@ -53,4 +53,24 @@ namespace Sistema_Integrado_de_Registro.Models
         public string Cedula { get; set; }
         public string NombreCompleto { get; set; }
     }
+
+    public class SeccionGuardarDto
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "El nombre de la sección es requerido")]
+        [StringLength(50, ErrorMessage = "El nombre no puede exceder los 50 caracteres")]
+        public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "El grado es requerido")]
+        [Range(1, 6, ErrorMessage = "El grado debe estar entre 1 y 6")]
+        public int Grado { get; set; }
+
+        [Required(ErrorMessage = "El año escolar es requerido")]
+        public int AnioEscolarId { get; set; }
+
+        [Required(ErrorMessage = "El docente guía es requerido")]
+        public int DocenteId { get; set; }
+    }
+
 }

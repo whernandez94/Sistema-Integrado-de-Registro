@@ -41,4 +41,13 @@ namespace Sistema_Integrado_de_Registro.Models
         public decimal? Lapso3 { get; set; }
         public decimal? PromedioFinal { get; set; }
     }
+
+    public class guardarNotaDto
+    {
+        public int EstudianteId { get; set; }
+        public int AsignaturaId { get; set; }
+        public int AnioEscolarId { get; set; }
+        public decimal? Lapso { get; set; }
+        public decimal? Valor { get; set; }
+    }
 }

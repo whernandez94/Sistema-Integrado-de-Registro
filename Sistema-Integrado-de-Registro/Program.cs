@@ -23,6 +23,7 @@ namespace Sistema_Integrado_de_Registro
             builder.Services.AddScoped<IInasistenciaService, InasistenciaService>();
             builder.Services.AddScoped<ISeccionService, SeccionService>();
             builder.Services.AddScoped<IMatriculaService, MatriculaService>();
+            builder.Services.AddScoped<IGradoService, GradoService>();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Gestión de Grados";
+}
+
+<div class="container-fluid">
+    <div class="card mb-4 shadow">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <h6 class="font-weight-bold text-primary m-0">@ViewData["Title"]</h6>
+            <button class="btn btn-sm btn-primary" id="btnNuevo"><i class="fas fa-plus"></i> Nuevo Grado</button>
+        </div>
+        <div class="card-body">
+            <table id="tblGrados" class="table-bordered table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Nivel</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<partial name="_Form" />
+
+@section Scripts {
+    <script src="~/js/grado.js"></script>
+}
