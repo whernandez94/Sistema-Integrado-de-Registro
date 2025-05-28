@@ -44,4 +44,14 @@ namespace Sistema_Integrado_de_Registro.Models
         public int? Lapso3 { get; set; }
         public bool Alerta { get; set; }
     }
+
+    public class GuardarInasistenciaDto
+    {
+        public int EstudianteId { get; set; }
+        public int AsignaturaId { get; set; }
+        public int AnioEscolarId { get; set; }
+        public int Porcentaje { get; set; }
+        public int? Lapso { get; set; }
+        public string Observaciones { get; set; }
+    }
 }

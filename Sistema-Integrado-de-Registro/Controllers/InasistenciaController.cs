@@ -1,21 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Models;
 using Sistema_Integrado_de_Registro.Services;
 
 namespace Sistema_Integrado_de_Registro.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Authorize]
     public class InasistenciaController : Controller
     {
         private readonly IInasistenciaService _service;
+        private readonly AppDbContext _context;
 
-        public InasistenciaController(IInasistenciaService service)
+        public InasistenciaController(IInasistenciaService service, AppDbContext context)
         {
             _service = service;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+
+            ViewBag.Estudiantes = _context.Estudiantes.ToList();
+
+            ViewBag.Asignaturas = _context.Asignaturas.ToList();
+
+            ViewBag.AniosEscolares = _context.AniosEscolares.ToList();
+
+            ViewBag.Lapsos = new List<int> { 1, 2, 3 };
+
             return View();
         }
 
@@ -34,12 +47,24 @@ namespace Sistema_Integrado_de_Registro.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Guardar([FromBody] Inasistencia model)
+        public async Task<IActionResult> Guardar([FromBody] GuardarInasistenciaDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _service.SaveInasistenciaAsync(model);
+
+            var nota = new Inasistencia
+            {
+                EstudianteId = dto.EstudianteId,
+                AsignaturaId = dto.AsignaturaId,
+                AnioEscolarId = dto.AnioEscolarId,
+                Lapso = (int)(dto.Lapso ?? 0), // Verifica también Lapso si es nullable
+                Observaciones = dto.Observaciones,
+                Porcentaje = dto.Porcentaje,
+            };
+
+
+            var result = await _service.SaveInasistenciaAsync(nota);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 

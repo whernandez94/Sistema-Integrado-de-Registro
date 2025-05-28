@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Models;
@@ -6,7 +7,7 @@ using Sistema_Integrado_de_Registro.Services;
 
 namespace Sistema_Integrado_de_Registro.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Authorize]
     public class SeccionController : Controller
     {
         private readonly ISeccionService _service;

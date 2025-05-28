@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     let tabla = $('#tablaAsignaturas').DataTable({
         ajax: {
-            url: '/Asignatura/ObtenerTodas',
+            url: '/asignaturas/ObtenerTodas',
             dataSrc: ''
         },
         columns: [
@@ -26,7 +26,7 @@
 
     $('#tablaAsignaturas').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        $.get(`/Asignatura/Obtener?id=${id}`, function (data) {
+        $.get(`/asignaturas/Obtener?id=${id}`, function (data) {
             $('input[name=id]').val(data.id);
             $('input[name=nombre]').val(data.nombre);
             $('input[name=porcentajeInasistencia]').val(data.porcentajeInasistencia);
@@ -38,7 +38,7 @@
         const id = $(this).data('id');
         if (!confirm("¿Eliminar asignatura?")) return;
         $.ajax({
-            url: `/Asignatura/Eliminar?id=${id}`,
+            url: `/asignaturas/Eliminar?id=${id}`,
             method: 'DELETE',
             success: function (res) {
                 mostrarMensaje(res.message, true);
@@ -56,7 +56,7 @@
         };
 
         $.ajax({
-            url: '/Asignatura/Guardar',
+            url: '/asignaturas/Guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),

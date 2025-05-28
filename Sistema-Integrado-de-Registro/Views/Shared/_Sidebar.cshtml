@@ -17,35 +17,35 @@
 
     <!-- Nav Item - Tables -->
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Institution" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("institucion")">
             <i class="fas fa-fw fa-table"></i>
             <span>Institucion</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Docente" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("docentes")">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Docentes</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Matricula" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("matricula")">
             <i class="fas fa-fw fa-table"></i>
             <span>Matricula</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Seccion" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("secciones")">
             <i class="fas fa-fw fa-table"></i>
             <span>Secciones</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Grado" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("grados")">
             <i class="fas fa-fw fa-table"></i>
             <span>Grados</span>
         </a>
@@ -54,37 +54,44 @@
 
     <!-- Nav Item - Charts -->
     <li class="nav-item">
-        <a class="nav-link" asp-controller="AnioEscolar" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("anios")">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Años escolares</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Asignatura" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("asignaturas")">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Asignaturas</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Estudiante" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("estudiantes")">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Estudiantes</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Nota" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("notas")">
             <i class="fas fa-fw fa-table"></i>
             <span>Notas</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Inasistencia" asp-action="Index">
+        <a class="nav-link" href="@Url.RouteUrl("inasistencias")">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Inasistencias</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Cuenta" asp-action="Logout">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Cerrrar Sesion</span>
         </a>
     </li>
 

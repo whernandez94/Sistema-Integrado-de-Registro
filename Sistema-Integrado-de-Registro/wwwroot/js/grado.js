@@ -1,7 +1,7 @@
 ﻿$(function () {
     let table = $('#tblGrados').DataTable({
         ajax: {
-            url: '/Grado/ObtenerTodos',
+            url: '/grados/ObtenerTodos',
             dataSrc: ''
         },
         columns: [
@@ -29,7 +29,7 @@
 
     $('#tblGrados').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        $.get(`/Grado/Obtener?id=${id}`, function (data) {
+        $.get(`/grados/Obtener?id=${id}`, function (data) {
             $('#Id').val(data.id);
             $('#Nombre').val(data.nombre);
             $('#Nivel').val(data.nivel);
@@ -42,7 +42,7 @@
         const id = $(this).data('id');
         if (confirm('¿Está seguro de eliminar este grado?')) {
             $.ajax({
-                url: `/Grado/Eliminar?id=${id}`,
+                url: `/grados/Eliminar?id=${id}`,
                 type: 'DELETE',
                 success: function (res) {
                     if (res.success) {
@@ -65,7 +65,7 @@
         };
 
         $.ajax({
-            url: '/Grado/Guardar',
+            url: '/grados/Guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(grado),

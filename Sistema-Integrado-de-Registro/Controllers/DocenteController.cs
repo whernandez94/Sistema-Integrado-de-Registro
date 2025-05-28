@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sistema_Integrado_de_Registro.Services;
 
-[Route("[controller]/[action]")]
+[Authorize]
 public class DocenteController : Controller
 {
     private readonly IDocenteService _service;
