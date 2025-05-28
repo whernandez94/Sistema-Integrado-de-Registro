@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sistema_Integrado_de_Registro.Models;
-using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Sistema_Integrado_de_Registro.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Authorize]
     public class AsignaturaController : Controller
     {
         private readonly IAsignaturaService _service;

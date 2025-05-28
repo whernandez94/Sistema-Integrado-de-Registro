@@ -14,7 +14,10 @@
                         <label asp-for="EstudianteId" class="form-label"></label>
                         <select asp-for="EstudianteId" class="form-control" required>
                             <option value="">Seleccione un estudiante</option>
-                            <!-- Se llenará dinámicamente -->
+                            @foreach (var item in ViewBag.Estudiantes)
+                            {
+                                <option value="@item.Id">@item.Nombre</option>
+                            }
                         </select>
                         <span asp-validation-for="EstudianteId" class="text-danger"></span>
                     </div>

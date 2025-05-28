@@ -1,21 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Models;
 using Sistema_Integrado_de_Registro.Services;
 
 namespace Sistema_Integrado_de_Registro.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Authorize]
     public class SeccionController : Controller
     {
         private readonly ISeccionService _service;
+        private readonly AppDbContext _context;
 
-        public SeccionController(ISeccionService service)
+        public SeccionController(ISeccionService service, AppDbContext context)
         {
             _service = service;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            ViewBag.Grados = _context.Grados.ToList();
+
+            ViewBag.Docentes = _context.Docentes
+                .Include(s => s.DocenteAsignaturas)
+                .ToList();
+
+            ViewBag.AniosEscolares = _context.AniosEscolares.ToList();
+
             return View();
         }
 
@@ -40,7 +53,6 @@ namespace Sistema_Integrado_de_Registro.Controllers
             }
         }
 
-        [HttpGet]
         public async Task<IActionResult> ImprimirListado(int id)
         {
             try
@@ -55,14 +67,24 @@ namespace Sistema_Integrado_de_Registro.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Guardar([FromBody] Seccion seccion)
+        public async Task<IActionResult> Guardar([FromBody] SeccionGuardarDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var seccion = new Seccion
+            {
+                Id = dto.Id,
+                Nombre = dto.Nombre,
+                Grado = dto.Grado,
+                AnioEscolarId = dto.AnioEscolarId,
+                DocenteId = dto.DocenteId
+            };
+
             var result = await _service.SaveSeccionAsync(seccion);
             return result.Success ? Ok(result) : BadRequest(result);
         }
+
 
         [HttpDelete]
         public async Task<IActionResult> Eliminar(int id)

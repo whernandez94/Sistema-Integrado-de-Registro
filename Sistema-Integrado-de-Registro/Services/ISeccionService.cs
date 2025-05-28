@@ -12,4 +12,5 @@ namespace Sistema_Integrado_de_Registro.Services
         Task<List<Docente>> GetDocentesDisponiblesAsync();
         Task<Seccion?> GetSeccionByIdAsync(int value);
     }
+
 }

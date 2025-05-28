@@ -13,7 +13,7 @@
         });
 
         $.ajax({
-            url: '/Estudiante/Guardar',
+            url: '/estudiantes/Guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -38,7 +38,7 @@
     });
 
     window.editar = function (id) {
-        $.get(`/Estudiante/Obtener?id=${id}`, function (data) {
+        $.get(`/estudiantes/Obtener?id=${id}`, function (data) {
             for (const key in data) {
                 $(`[name="${key}"]`).val(data[key]);
             }
@@ -50,7 +50,7 @@
         if (!confirm("¿Deseas eliminar este estudiante?")) return;
 
         $.ajax({
-            url: `/Estudiante/Eliminar?id=${id}`,
+            url: `/estudiantes/Eliminar?id=${id}`,
             method: 'DELETE',
             success: function (res) {
                 alert(res.message);
@@ -60,7 +60,7 @@
     };
 
     function cargarTabla() {
-        $.get('/Estudiante/ObtenerTodos', function (data) {
+        $.get('/estudiantes/ObtenerTodos', function (data) {
             let html = '';
             data.forEach(e => {
                 html += `

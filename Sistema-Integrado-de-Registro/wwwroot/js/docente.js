@@ -16,7 +16,7 @@
         };
 
         $.ajax({
-            url: '/Docente/Guardar',
+            url: '/docentes/Guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -34,7 +34,7 @@
     });
 
     window.editar = function (id) {
-        $.get(`/Docente/Obtener?id=${id}`, function (data) {
+        $.get(`/docentes/Obtener?id=${id}`, function (data) {
             for (const key in data) {
                 const field = $(`[name="${key}"]`);
                 if (field.length) field.val(data[key]);
@@ -47,7 +47,7 @@
     window.eliminar = function (id) {
         if (!confirm("¿Deseas eliminar este docente?")) return;
         $.ajax({
-            url: `/Docente/Eliminar?id=${id}`,
+            url: `/docentes/Eliminar?id=${id}`,
             method: 'DELETE',
             success: function (res) {
                 alert(res.message);
@@ -57,7 +57,7 @@
     };
 
     function cargarTabla() {
-        $.get('/Docente/ObtenerTodos', function (data) {
+        $.get('/docentes/ObtenerTodos', function (data) {
             let html = '';
             data.forEach(d => {
                 html += `

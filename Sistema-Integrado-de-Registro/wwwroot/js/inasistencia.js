@@ -20,7 +20,7 @@
                 data: null,
                 render: function (data, type, row) {
                     return `
-                        <button class="btn btn-sm btn-primary btn-editar" data-id="${row.estudianteId}" data-asignatura="${row.asignaturaId}">
+                        <button class="btn btn-sm btn-primary btn-editar" data-id="${row.inasistenciaId}" data-asignatura="${row.inasistenciaId}">
                             <i class="fas fa-edit"></i>
                         </button>
                     `;
@@ -37,7 +37,7 @@
     }
 
     // Cargar filtros
-    $.get('/Inasistencia/ObtenerFiltros', function (data) {
+    $.get('/inasistencias/ObtenerFiltros', function (data) {
         $('#anioEscolarId').empty().append('<option value="">Seleccione un año</option>');
         $('#asignaturaId').empty().append('<option value="">Todas</option>');
 
@@ -66,7 +66,7 @@
             return;
         }
 
-        $.get(`/Inasistencia/ObtenerInasistencias?anioEscolarId=${anioEscolarId}&asignaturaId=${asignaturaId || ''}`, function (data) {
+        $.get(`/inasistencias/ObtenerInasistencias?anioEscolarId=${anioEscolarId}&asignaturaId=${asignaturaId || ''}`, function (data) {
             table.clear().rows.add(data).draw();
         });
     });
@@ -76,7 +76,7 @@
         const anioEscolarId = $(this).val();
         if (!anioEscolarId) return;
 
-        $.get(`/Inasistencia/ObtenerEstudiantes?anioEscolarId=${anioEscolarId}`, function (estudiantes) {
+        $.get(`/inasistencias/ObtenerEstudiantes?anioEscolarId=${anioEscolarId}`, function (estudiantes) {
             $('#EstudianteId').empty().append('<option value="">Seleccione un estudiante</option>');
             $.each(estudiantes, function (i, item) {
                 $('#EstudianteId').append($('<option>', {
@@ -118,7 +118,7 @@
         };
 
         $.ajax({
-            url: '/Inasistencia/Guardar',
+            url: '/inasistencias/Guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(inasistencia),

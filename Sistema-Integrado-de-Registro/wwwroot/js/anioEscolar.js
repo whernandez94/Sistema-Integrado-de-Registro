@@ -3,7 +3,7 @@
 });
 
 function cargarAnios() {
-    $.get('/AnioEscolar/ObtenerTodos', function (data) {
+    $.get('/anios-escolares/ObtenerTodos', function (data) {
         let html = '';
         data.forEach(function (a) {
             html += `
@@ -57,7 +57,7 @@ function cargarAnios() {
 }
 
 function abrirFormulario(id = 0) {
-    const url = id ? `/AnioEscolar/Form?id=${id}` : `/AnioEscolar/Form`;
+    const url = id ? `/anios-escolares/Form?id=${id}` : `/anios-escolares/Form`;
 
     $.get(url, function (html) {
         $('#modalAnioEscolarBody').html(html);
@@ -92,7 +92,7 @@ function abrirFormulario(id = 0) {
             };
 
             $.ajax({
-                url: '/AnioEscolar/Guardar',
+                url: '/anios-escolares/Guardar',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(anio),
@@ -112,7 +112,7 @@ function eliminar(id) {
     if (!confirm('¿Eliminar este año escolar?')) return;
 
     $.ajax({
-        url: `/AnioEscolar/Eliminar?id=${id}`,
+        url: `/anios-escolares/Eliminar?id=${id}`,
         type: 'DELETE',
         success: function () {
             cargarAnios();
@@ -123,7 +123,7 @@ function eliminar(id) {
 function finalizar(id) {
     if (!confirm('¿Finalizar este año escolar?')) return;
 
-    $.post(`/AnioEscolar/Finalizar?id=${id}`, function () {
+    $.post(`/anios-escolares/Finalizar?id=${id}`, function () {
         cargarAnios();
     });
 }

@@ -1,21 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Models;
 using Sistema_Integrado_de_Registro.Services;
 
 namespace Sistema_Integrado_de_Registro.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Authorize]
     public class NotaController : Controller
     {
         private readonly INotaService _notaService;
+        private readonly AppDbContext _context;
 
-        public NotaController(INotaService notaService)
+        public NotaController(INotaService notaService, AppDbContext context)
         {
             _notaService = notaService;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            ViewBag.Estudiantes = _context.Estudiantes.ToList();
+
+            ViewBag.Asignaturas = _context.Asignaturas.ToList();
+
+            ViewBag.AniosEscolares = _context.AniosEscolares.ToList();
+
+            ViewBag.Lapsos = new List<int> { 1, 2, 3 };
+
             return View();
         }
 
@@ -34,10 +46,23 @@ namespace Sistema_Integrado_de_Registro.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Guardar([FromBody] Nota nota)
+        public async Task<IActionResult> Guardar([FromBody] guardarNotaDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+           if (!dto.Valor.HasValue)
+                return BadRequest("El promedio final es requerido.");
+
+            var nota = new Nota
+            {
+                EstudianteId = dto.EstudianteId,
+                AsignaturaId = dto.AsignaturaId,
+                AnioEscolarId = dto.AnioEscolarId,
+                Lapso = (int)(dto.Lapso ?? 0), // Verifica también Lapso si es nullable
+                Valor = dto.Valor.Value
+            };
+
 
             var result = await _notaService.SaveNotaAsync(nota);
             return result.Success ? Ok(result) : BadRequest(result);

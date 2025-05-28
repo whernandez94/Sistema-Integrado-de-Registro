@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Services;
@@ -23,18 +24,19 @@ namespace Sistema_Integrado_de_Registro
             builder.Services.AddScoped<IInasistenciaService, InasistenciaService>();
             builder.Services.AddScoped<ISeccionService, SeccionService>();
             builder.Services.AddScoped<IMatriculaService, MatriculaService>();
+            builder.Services.AddScoped<IGradoService, GradoService>();
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Cuenta/Login";
+                options.LogoutPath = "/Cuenta/Logout";
+            });
 
 
             var app = builder.Build();
-
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var db = scope.ServiceProvider.GetRequiredService <AppDbContext>();
-            //    db.Database.Migrate();
-            //}
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -49,43 +51,92 @@ namespace Sistema_Integrado_de_Registro
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseRouting();
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "",
+                defaults: new { controller = "Cuenta", action = "Login" });
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "login",
+                pattern: "iniciar-sesion",
+                defaults: new { controller = "Cuenta", action = "Login" });
 
-                endpoints.MapControllerRoute(
-                    name: "estudiantes",
-                    pattern: "estudiantes/{action=Index}/{id?}",
-                    defaults: new { controller = "Estudiante" });
 
-                endpoints.MapControllerRoute(
-                    name: "docentes",
-                    pattern: "docentes/{action=Index}/{id?}",
-                    defaults: new { controller = "Docente" });
+            app.MapControllerRoute(
+                name: "logout",
+                pattern: "cerrar-sesion",
+                defaults: new { controller = "Cuenta", action = "Logout" });
 
-                endpoints.MapControllerRoute(
-                    name: "asignaturas",
-                    pattern: "asignaturas/{action=Index}/{id?}",
-                    defaults: new { controller = "Asignatura" });
+            app.MapControllerRoute(
+                name: "inicio",
+                pattern: "panel",
+                defaults: new { controller = "Home", action = "Index" });
 
-                endpoints.MapControllerRoute(
-                    name: "asignacion-docente",
-                    pattern: "asignacion-docente/{action=Index}/{id?}",
-                    defaults: new { controller = "Asignacion" });
+            /*** rutas anios escolares  **/
+            app.MapControllerRoute(
+                name: "anios",
+                pattern: "anios-escolares/{action=Index}",
+                defaults: new { controller = "AnioEscolar" });
 
-                endpoints.MapControllerRoute(
-                    name: "anios-escolares",
-                    pattern: "anios-escolares/{action=Index}/{id?}",
-                    defaults: new { controller = "SchoolYear" });
-            });
+            /** Asignaturas **/
+            app.MapControllerRoute(
+                name: "asignaturas",
+                pattern: "asignaturas/{action=Index}",
+                defaults: new { controller = "Asignatura" });
+
+            /*** Docentes **/
+            app.MapControllerRoute(
+                name: "docentes",
+                pattern: "docentes/{action=Index}",
+                defaults: new { controller = "Docente" });
+
+            /*** Estudiantes **/
+            app.MapControllerRoute(
+                name: "estudiantes",
+                pattern: "estudiantes/{action=Index}",
+                defaults: new { controller = "Estudiante" });
+
+            /*** Grados **/
+            app.MapControllerRoute(
+                name: "grados",
+                pattern: "grados/{action=Index}",
+                defaults: new { controller = "Grado" });
+
+            /*** Inasistencias **/
+            app.MapControllerRoute(
+                name: "inasistencias",
+                pattern: "inasistencias/{action=Index}",
+                defaults: new { controller = "Inasistencia" });
+
+            /*** Institucion **/
+            app.MapControllerRoute(
+                name: "institucion",
+                pattern: "institucion/{action=Index}",
+                defaults: new { controller = "Institution" });
+
+            /*** Matricula **/
+            app.MapControllerRoute(
+                name: "matricula",
+                pattern: "matricula-de-alumnos/{action=Index}",
+                defaults: new { controller = "Matricula" });
+
+            /*** Notas **/
+            app.MapControllerRoute(
+                name: "notas",
+                pattern: "notas/{action=Index}",
+                defaults: new { controller = "Nota" });
+
+            /*** Notas **/
+            app.MapControllerRoute(
+                name: "secciones",
+                pattern: "secciones/{action=Index}",
+                defaults: new { controller = "Seccion" });
 
             app.Run();
+
         }
     }
 }

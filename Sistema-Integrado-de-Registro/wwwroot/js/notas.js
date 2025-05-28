@@ -27,7 +27,7 @@
     }
 
     // Cargar filtros
-    $.get('/Nota/ObtenerFiltros', function (data) {
+    $.get('/notas/ObtenerFiltros', function (data) {
         $('#anioEscolarId').empty().append('<option value="">Seleccione un año</option>');
         $('#asignaturaId').empty().append('<option value="">Todas</option>');
 
@@ -56,7 +56,7 @@
             return;
         }
 
-        $.get(`/Nota/ObtenerNotas?anioEscolarId=${anioEscolarId}&asignaturaId=${asignaturaId || ''}`, function (data) {
+        $.get(`/notas/ObtenerNotas?anioEscolarId=${anioEscolarId}&asignaturaId=${asignaturaId || ''}`, function (data) {
             table.clear().rows.add(data).draw();
         });
     });
@@ -100,7 +100,7 @@
         };
 
         $.ajax({
-            url: '/Nota/Guardar',
+            url: '/notas/Guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(nota),

@@ -21,7 +21,7 @@
                             <option value="">Seleccione un grado</option>
                             @foreach (var grado in ViewBag.Grados)
                             {
-                                <option value="@grado">Grado @grado</option>
+                                <option value="@grado.Id">@grado.Nombre</option>
                             }
                         </select>
                         <span asp-validation-for="Grado" class="text-danger"></span>

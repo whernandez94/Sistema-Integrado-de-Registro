@@ -70,7 +70,10 @@ namespace Sistema_Integrado_de_Registro.Services
                         Apellido = dto.Apellido,
                         Telefono = dto.Telefono,
                         Correo = dto.Correo,
-                        CargaHoras = dto.CargaHoras
+                        CargaHoras = dto.CargaHoras,
+                        Codigo = dto.Codigo, // debes agregarlo al DTO
+                        Contrasena = BCrypt.Net.BCrypt.HashPassword(dto.Contrasena), // también agregar al DTO
+                        Rol = "Evaluador", // o "Administrador"
                     };
 
                     await _context.Docentes.AddAsync(docente);

@@ -41,5 +41,9 @@
         public string Correo { get; set; }
         public int CargaHoras { get; set; }
         public List<int> Asignaturas { get; set; } = new();
+
+        public string Codigo { get; set; }
+
+        public string Contrasena { get; set; }
     }
 }

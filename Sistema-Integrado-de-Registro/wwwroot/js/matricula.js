@@ -2,16 +2,48 @@
     let table = $('#tblMatriculas').DataTable({
         responsive: true,
         ajax: {
-            url: '/Matricula/ObtenerTodas',
+            url: '/matricula-de-alumnos/ObtenerTodas',
             dataSrc: ''
         },
         columns: [
-            { data: 'estudianteNombre' },
-            { data: 'estudianteCedula' },
-            { data: 'seccionNombre' },
-            { data: 'grado' },
-            { data: 'anioEscolar' },
-            { data: 'fechaMatricula' },
+            {
+                data: 'estudiante',
+                render: function (data) {
+                    if (!data) return '';
+                    return `${data.nombre} ${data.apellido}`;
+                }
+            },
+            {
+                data: 'estudiante',
+                render: function (data) {
+                    return data?.cedula ?? '';
+                }
+            },
+            {
+                data: 'seccion',
+                render: function (data) {
+                    return data?.nombre ?? '';
+                }
+            },
+            {
+                data: 'seccion',
+                render: function (data) {
+                    return data?.grado ?? '';
+                }
+            },
+            {
+                data: 'anioEscolar',
+                render: function (data) {
+                    return data?.anio ?? '';
+                }
+            },
+            {
+                data: 'fechaMatricula',
+                render: function (data) {
+                    if (!data) return '';
+                    return data.split('T')[0]; // formato yyyy-MM-dd
+                }
+            },
             { data: 'numeroExpediente' },
             {
                 data: 'activa',
@@ -50,7 +82,7 @@
     $('#tblMatriculas').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
 
-        $.get(`/Matricula/Obtener?id=${id}`, function (data) {
+        $.get(`/matricula-de-alumnos/Obtener?id=${id}`, function (data) {
             if (data) {
                 $('#Id').val(data.id);
                 $('#EstudianteId').val(data.estudianteId);
@@ -82,7 +114,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/Matricula/Eliminar?id=${id}`,
+                    url: `/matricula-de-alumnos/Eliminar?id=${id}`,
                     type: 'DELETE',
                     success: function (response) {
                         if (response.success) {
@@ -115,7 +147,7 @@
         };
 
         $.ajax({
-            url: '/Matricula/Guardar',
+            url: '/matricula-de-alumnos/Guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(matricula),
