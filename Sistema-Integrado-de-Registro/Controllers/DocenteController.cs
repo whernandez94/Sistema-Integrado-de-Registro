@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Sistema_Integrado_de_Registro.Services;
 
 [Authorize]
+[Route("gestion-escolar/docentes")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class DocenteController : Controller
 {
     private readonly IDocenteService _service;
@@ -12,16 +14,18 @@ public class DocenteController : Controller
         _service = service;
     }
 
+    [HttpGet("")]
+    [HttpGet("listado")]
     public IActionResult Index() => View();
 
-    [HttpGet]
+    [HttpGet("obtener-todos")]
     public async Task<IActionResult> ObtenerTodos()
     {
         var docentes = await _service.GetAllDocentesAsync();
         return Json(docentes);
     }
 
-    [HttpGet]
+    [HttpGet("obtener/{id:int}")]
     public async Task<IActionResult> Obtener(int id)
     {
         var docente = await _service.GetDocenteByIdAsync(id);
@@ -30,7 +34,7 @@ public class DocenteController : Controller
             : NotFound();
     }
 
-    [HttpPost]
+    [HttpPost("guardar")]
     public async Task<IActionResult> Guardar([FromBody] DocenteSaveDto dto)
     {
         if (!ModelState.IsValid)
@@ -43,7 +47,7 @@ public class DocenteController : Controller
             : BadRequest(result.Message);
     }
 
-    [HttpDelete]
+    [HttpDelete("eliminar/{id:int}")]
     public async Task<IActionResult> Eliminar(int id)
     {
         var result = await _service.DeleteDocenteAsync(id);

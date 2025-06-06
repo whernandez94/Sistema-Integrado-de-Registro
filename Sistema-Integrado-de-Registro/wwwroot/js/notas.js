@@ -27,7 +27,7 @@
     }
 
     // Cargar filtros
-    $.get('/notas/ObtenerFiltros', function (data) {
+    $.get('/gestion-escolar/notas/obtener-filtros', function (data) {
         $('#anioEscolarId').empty().append('<option value="">Seleccione un año</option>');
         $('#asignaturaId').empty().append('<option value="">Todas</option>');
 
@@ -56,7 +56,7 @@
             return;
         }
 
-        $.get(`/notas/ObtenerNotas?anioEscolarId=${anioEscolarId}&asignaturaId=${asignaturaId || ''}`, function (data) {
+        $.get(`/gestion-escolar/notas/obtener-notas/${anioEscolarId}/${asignaturaId || ''}`, function (data) {
             table.clear().rows.add(data).draw();
         });
     });
@@ -100,7 +100,7 @@
         };
 
         $.ajax({
-            url: '/notas/Guardar',
+            url: '/gestion-escolar/notas/guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(nota),

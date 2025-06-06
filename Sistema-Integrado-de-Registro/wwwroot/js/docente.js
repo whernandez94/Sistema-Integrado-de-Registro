@@ -16,7 +16,7 @@
         };
 
         $.ajax({
-            url: '/docentes/Guardar',
+            url: '/gestion-escolar/docentes/guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -34,7 +34,7 @@
     });
 
     window.editar = function (id) {
-        $.get(`/docentes/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/docentes/obtener/${id}`, function (data) {
             for (const key in data) {
                 const field = $(`[name="${key}"]`);
                 if (field.length) field.val(data[key]);
@@ -47,7 +47,7 @@
     window.eliminar = function (id) {
         if (!confirm("¿Deseas eliminar este docente?")) return;
         $.ajax({
-            url: `/docentes/Eliminar?id=${id}`,
+            url: `/gestion-escolar/docentes/eliminar/${id}`,
             method: 'DELETE',
             success: function (res) {
                 alert(res.message);
@@ -57,7 +57,7 @@
     };
 
     function cargarTabla() {
-        $.get('/docentes/ObtenerTodos', function (data) {
+        $.get('/gestion-escolar/docentes/obtener-todos', function (data) {
             let html = '';
             data.forEach(d => {
                 html += `

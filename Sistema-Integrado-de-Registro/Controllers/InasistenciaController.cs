@@ -7,6 +7,8 @@ using Sistema_Integrado_de_Registro.Services;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/inasistencias")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class InasistenciaController : Controller
     {
         private readonly IInasistenciaService _service;
@@ -18,6 +20,8 @@ namespace Sistema_Integrado_de_Registro.Controllers
             _context = context;
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index()
         {
 
@@ -32,21 +36,21 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("obtener-todas/{anioEscolarId:int}/{asignaturaId:int}")]
         public async Task<IActionResult> ObtenerInasistencias(int anioEscolarId, int? asignaturaId)
         {
             var inasistencias = await _service.GetInasistenciasConResumenAsync(anioEscolarId, asignaturaId);
             return Json(inasistencias);
         }
 
-        [HttpGet]
+        [HttpGet("obtener/{id:int}")]
         public async Task<IActionResult> Obtener(int id)
         {
             var inasistencia = await _service.GetInasistenciaAsync(id);
             return inasistencia != null ? Json(inasistencia) : NotFound();
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public async Task<IActionResult> Guardar([FromBody] GuardarInasistenciaDto dto)
         {
             if (!ModelState.IsValid)
@@ -68,14 +72,14 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("eliminar/{id:int}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var result = await _service.DeleteInasistenciaAsync(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpGet]
+        [HttpGet("obtener-por-filtros")]
         public async Task<IActionResult> ObtenerFiltros()
         {
             var asignaturas = await _service.GetAsignaturasDisponiblesAsync();
@@ -83,7 +87,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return Json(new { asignaturas, anios });
         }
 
-        [HttpGet]
+        [HttpGet("form/{id:int?}")]
         public async Task<IActionResult> Form(int? id)
         {
             ViewBag.Lapsos = new List<int> { 1, 2, 3 };
@@ -103,7 +107,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return PartialView("_Form", modelo);
         }
 
-        [HttpGet]
+        [HttpGet("obtener-estudiantes-por-anio/{anioEscolarId:int?}")]
         public async Task<IActionResult> ObtenerEstudiantes(int anioEscolarId)
         {
             var estudiantes = await _service.GetEstudiantesConInasistenciasAsync(anioEscolarId);

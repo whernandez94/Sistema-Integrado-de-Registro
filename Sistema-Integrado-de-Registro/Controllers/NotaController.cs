@@ -7,6 +7,8 @@ using Sistema_Integrado_de_Registro.Services;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/notas")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class NotaController : Controller
     {
         private readonly INotaService _notaService;
@@ -18,6 +20,8 @@ namespace Sistema_Integrado_de_Registro.Controllers
             _context = context;
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index()
         {
             ViewBag.Estudiantes = _context.Estudiantes.ToList();
@@ -31,21 +35,21 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("obtener-notas/{anioEscolarId:int}/{asignaturaId:int}")]
         public async Task<IActionResult> ObtenerNotas(int anioEscolarId, int? asignaturaId)
         {
             var notas = await _notaService.GetNotasConPromediosAsync(anioEscolarId, asignaturaId);
             return Json(notas);
         }
 
-        [HttpGet]
+        [HttpGet("obtener/{id:int}")]
         public async Task<IActionResult> Obtener(int id)
         {
             var nota = await _notaService.GetNotaAsync(id);
             return nota != null ? Json(nota) : NotFound();
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public async Task<IActionResult> Guardar([FromBody] guardarNotaDto dto)
         {
             if (!ModelState.IsValid)
@@ -68,14 +72,14 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("eliminar/{id:int}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var result = await _notaService.DeleteNotaAsync(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpGet]
+        [HttpGet("obtener-filtros")]
         public async Task<IActionResult> ObtenerFiltros()
         {
             var asignaturas = await _notaService.GetAsignaturasDisponiblesAsync();
@@ -84,7 +88,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return Json(new { asignaturas, anios });
         }
 
-        [HttpGet]
+        [HttpGet("form/{id:int}")]
         public async Task<IActionResult> Form(int? id)
         {
             ViewBag.Lapsos = new List<int> { 1, 2, 3 };

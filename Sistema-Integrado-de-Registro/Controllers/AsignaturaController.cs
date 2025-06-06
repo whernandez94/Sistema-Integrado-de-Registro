@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/asignaturas")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AsignaturaController : Controller
     {
         private readonly IAsignaturaService _service;
@@ -14,16 +16,18 @@ namespace Sistema_Integrado_de_Registro.Controllers
             _service = service;
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index() => View();
 
-        [HttpGet]
+        [HttpGet("obtener-todas")]
         public async Task<IActionResult> ObtenerTodas()
         {
             var asignaturas = await _service.GetAllAsignaturasAsync();
             return Json(asignaturas);
         }
 
-        [HttpGet]
+        [HttpGet("obtener/{id:int}")]
         public async Task<IActionResult> Obtener(int id)
         {
             var asignatura = await _service.GetAsignaturaByIdAsync(id);
@@ -32,7 +36,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : NotFound();
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public async Task<IActionResult> Guardar([FromBody] AsignaturaDto dto)
         {
             if (!ModelState.IsValid)
@@ -45,7 +49,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : BadRequest(result.Message);
         }
 
-        [HttpDelete]
+        [HttpDelete("eliminar/{id:int}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var result = await _service.DeleteAsignaturaAsync(id);
@@ -54,7 +58,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : BadRequest(result.Message);
         }
 
-        [HttpPost]
+        [HttpPost("cambiar-estado/{id:int}")]
         public async Task<IActionResult> CambiarEstado(int id)
         {
             var result = await _service.ToggleAsignaturaStatusAsync(id);

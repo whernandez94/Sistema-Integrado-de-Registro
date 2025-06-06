@@ -8,6 +8,8 @@ using Sistema_Integrado_de_Registro.Services;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/matricula")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MatriculaController : Controller
     {
         private readonly IMatriculaService _matriculaService;
@@ -20,6 +22,8 @@ namespace Sistema_Integrado_de_Registro.Controllers
 
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index()
         {
             ViewBag.Estudiantes = _context.Estudiantes
@@ -35,14 +39,14 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("obtener-todas")]
         public async Task<IActionResult> ObtenerTodos()
         {
             var matriculas = await _matriculaService.GetAllMatriculasAsync();
             return Json(matriculas);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("obtener/{id:int}")]
         public async Task<IActionResult> Obtener(int id)
         {
             var matricula = await _matriculaService.GetMatriculaByIdAsync(id);
@@ -52,7 +56,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return Json(matricula);
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public async Task<IActionResult> Guardar([FromBody] Matricula matricula)
         {
             if (!ModelState.IsValid)
@@ -65,7 +69,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return Ok(new { resultado.Message });
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("eliminar/{id:int}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var resultado = await _matriculaService.DeleteMatriculaAsync(id);
@@ -75,28 +79,28 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return Ok(new { resultado.Message });
         }
 
-        [HttpGet]
+        [HttpGet("estudiantes-disponibles")]
         public async Task<IActionResult> EstudiantesDisponibles()
         {
             var estudiantes = await _matriculaService.GetEstudiantesDisponiblesAsync();
             return Json(estudiantes);
         }
 
-        [HttpGet]
+        [HttpGet("secciones-disponibles")]
         public async Task<IActionResult> SeccionesDisponibles()
         {
             var secciones = await _matriculaService.GetSeccionesDisponiblesAsync();
             return Json(secciones);
         }
 
-        [HttpGet]
+        [HttpGet("anios-disponibles")]
         public async Task<IActionResult> AniosEscolaresDisponibles()
         {
             var anios = await _matriculaService.GetAniosEscolaresDisponiblesAsync();
             return Json(anios);
         }
 
-        [HttpGet]
+        [HttpGet("generar-numero-expediente")]
         public async Task<IActionResult> GenerarNumeroExpediente()
         {
             var numero = await _matriculaService.GenerarNumeroExpedienteAsync();

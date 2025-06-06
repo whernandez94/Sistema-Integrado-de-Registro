@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     let tabla = $('#tablaInstituciones').DataTable({
         ajax: {
-            url: '/institucion/ObtenerTodas',
+            url: '/gestion-escolar/institucion/obtener-todas',
             dataSrc: ''
         },
         columns: [
@@ -47,7 +47,7 @@
         }
 
         $.ajax({
-            url: '/institucion/Guardar',
+            url: '/gestion-escolar/institucion/guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
@@ -65,7 +65,7 @@
 
     $('#tablaInstituciones').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        $.get(`/institucion/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/institucion/obtener/${id}`, function (data) {
             for (const key in data) {
                 const field = $(`[name="${key}"]`);
                 if (field.length) {
@@ -84,7 +84,7 @@
         const id = $(this).data('id');
         if (!confirm("¿Deseas eliminar este registro?")) return;
         $.ajax({
-            url: `/institucion/Eliminar?id=${id}`,
+            url: `/gestion-escolar/institucion/eliminar/${id}`,
             method: 'DELETE',
             success: function (res) {
                 mostrarMensaje(res.message, true);

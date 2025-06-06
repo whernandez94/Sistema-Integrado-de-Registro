@@ -57,7 +57,7 @@
 
             _logger.LogInformation("Usuario {Codigo} ha iniciado sesión correctamente.", codigo);
 
-            return RedirectToRoute("inicio");
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Logout()

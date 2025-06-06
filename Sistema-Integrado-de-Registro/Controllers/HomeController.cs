@@ -15,11 +15,13 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [Route("inicio")]
     public IActionResult Index()
     {
         return View();
     }
 
+    [Route("privacy")]
     public IActionResult Privacy()
     {
         return View();

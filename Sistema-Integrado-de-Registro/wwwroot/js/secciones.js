@@ -2,7 +2,7 @@
     let table = $('#tblSecciones').DataTable({
         responsive: true,
         ajax: {
-            url: '/secciones/ObtenerTodas',
+            url: '/gestion-escolar/secciones/obtener-todas',
             dataSrc: ''
         },
         columns: [
@@ -47,13 +47,13 @@
     // Ver detalle de sección
     $('#tblSecciones').on('click', '.btn-detalle', function () {
         const id = $(this).data('id');
-        window.open(`/secciones/ObtenerDetalle?id=${id}`, '_blank');
+        window.open(`/gestion-escolar/secciones/obtener-detalle/${id}`, '_blank');
     });
 
     // Imprimir listado de sección
     $('#tblSecciones').on('click', '.btn-imprimir', function () {
         const id = $(this).data('id');
-        window.open(`/secciones/ImprimirListado?id=${id}`, '_blank');
+        window.open(`/gestion-escolar/secciones/imprimir-listado/${id}`, '_blank');
     });
 
     // Eliminar sección
@@ -72,7 +72,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/secciones/Eliminar?id=${id}`,
+                    url: `/gestion-escolar/secciones/eliminar/${id}`,
                     type: 'DELETE',
                     success: function (response) {
                         if (response.success) {
@@ -103,7 +103,7 @@
         };
 
         $.ajax({
-            url: '/secciones/Guardar',
+            url: '/gestion-escolar/secciones/guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(seccion),

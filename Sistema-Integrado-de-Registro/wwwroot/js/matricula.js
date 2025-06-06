@@ -2,7 +2,7 @@
     let table = $('#tblMatriculas').DataTable({
         responsive: true,
         ajax: {
-            url: '/matricula-de-alumnos/ObtenerTodas',
+            url: '/gestion-escolar/matricula/obtener-todas',
             dataSrc: ''
         },
         columns: [
@@ -82,7 +82,7 @@
     $('#tblMatriculas').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
 
-        $.get(`/matricula-de-alumnos/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/matricula/obtener/${id}`, function (data) {
             if (data) {
                 $('#Id').val(data.id);
                 $('#EstudianteId').val(data.estudianteId);
@@ -114,7 +114,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/matricula-de-alumnos/Eliminar?id=${id}`,
+                    url: `/gestion-escolar/matricula/eliminar/${id}`,
                     type: 'DELETE',
                     success: function (response) {
                         if (response.success) {
@@ -147,7 +147,7 @@
         };
 
         $.ajax({
-            url: '/matricula-de-alumnos/Guardar',
+            url: '/gestion-escolar/matricula/guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(matricula),

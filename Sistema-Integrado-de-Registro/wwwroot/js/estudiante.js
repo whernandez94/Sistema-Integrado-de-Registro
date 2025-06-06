@@ -13,7 +13,7 @@
         });
 
         $.ajax({
-            url: '/estudiantes/Guardar',
+            url: '/gestion-escolar/estudiantes/guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -38,7 +38,7 @@
     });
 
     window.editar = function (id) {
-        $.get(`/estudiantes/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/estudiantes/obtener/${id}`, function (data) {
             for (const key in data) {
                 $(`[name="${key}"]`).val(data[key]);
             }
@@ -50,7 +50,7 @@
         if (!confirm("¿Deseas eliminar este estudiante?")) return;
 
         $.ajax({
-            url: `/estudiantes/Eliminar?id=${id}`,
+            url: `/gestion-escolar/estudiantes/eliminar/${id}`,
             method: 'DELETE',
             success: function (res) {
                 alert(res.message);
@@ -60,7 +60,7 @@
     };
 
     function cargarTabla() {
-        $.get('/estudiantes/ObtenerTodos', function (data) {
+        $.get('/gestion-escolar/estudiantes/obtener-todos', function (data) {
             let html = '';
             data.forEach(e => {
                 html += `

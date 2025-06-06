@@ -37,7 +37,7 @@
     }
 
     // Cargar filtros
-    $.get('/inasistencias/ObtenerFiltros', function (data) {
+    $.get('/gestion-escolar/inasistencias/obtener-por-filtros', function (data) {
         $('#anioEscolarId').empty().append('<option value="">Seleccione un año</option>');
         $('#asignaturaId').empty().append('<option value="">Todas</option>');
 
@@ -66,7 +66,7 @@
             return;
         }
 
-        $.get(`/inasistencias/ObtenerInasistencias?anioEscolarId=${anioEscolarId}&asignaturaId=${asignaturaId || ''}`, function (data) {
+        $.get(`/gestion-escolar/inasistencias/obtener-todas/${anioEscolarId}/${asignaturaId || ''}`, function (data) {
             table.clear().rows.add(data).draw();
         });
     });
@@ -76,7 +76,7 @@
         const anioEscolarId = $(this).val();
         if (!anioEscolarId) return;
 
-        $.get(`/inasistencias/ObtenerEstudiantes?anioEscolarId=${anioEscolarId}`, function (estudiantes) {
+        $.get(`/gestion-escolar/inasistencias/obtener-estudiantes-por-anio/${anioEscolarId}`, function (estudiantes) {
             $('#EstudianteId').empty().append('<option value="">Seleccione un estudiante</option>');
             $.each(estudiantes, function (i, item) {
                 $('#EstudianteId').append($('<option>', {
@@ -118,7 +118,7 @@
         };
 
         $.ajax({
-            url: '/inasistencias/Guardar',
+            url: '/gestion-escolar/inasistencias/guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(inasistencia),
