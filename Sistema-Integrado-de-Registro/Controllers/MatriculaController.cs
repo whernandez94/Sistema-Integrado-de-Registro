@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Integrado_de_Registro.Data;
+using Sistema_Integrado_de_Registro.DTO;
 using Sistema_Integrado_de_Registro.Models;
 using Sistema_Integrado_de_Registro.Services;
 
@@ -57,16 +58,27 @@ namespace Sistema_Integrado_de_Registro.Controllers
         }
 
         [HttpPost("guardar")]
-        public async Task<IActionResult> Guardar([FromBody] Matricula matricula)
+        public async Task<IActionResult> Guardar([FromBody] MatriculaDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var resultado = await _matriculaService.SaveMatriculaAsync(matricula);
-            if (!resultado.Success)
-                return BadRequest(resultado.Message);
+            var matricula = new Matricula
+            {
+                Id = dto.Id,
+                EstudianteId = dto.EstudianteId,
+                SeccionId = dto.SeccionId,
+                AnioEscolarId = dto.AnioEscolarId,
+                FechaMatricula = dto.FechaMatricula,
+                NumeroExpediente = dto.NumeroExpediente,
+                Observaciones = dto.Observaciones
+            };
 
-            return Ok(new { resultado.Message });
+            var resultado = await _matriculaService.SaveMatriculaAsync(matricula);
+
+            return resultado.Success
+                ? Ok(new { resultado.Message })
+                : BadRequest(resultado.Message);
         }
 
         [HttpDelete("eliminar/{id:int}")]

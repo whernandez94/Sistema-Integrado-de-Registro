@@ -11,6 +11,9 @@
             Apellido: $('input[name=Apellido]').val().trim(),
             Telefono: $('input[name=Telefono]').val().trim(),
             Correo: $('input[name=Correo]').val().trim(),
+            Rol: $('input[name=Rol]').val().trim(),
+            Contrasena: $('input[name=Contrasena]').val().trim(),
+            Codigo: $('input[name=Codigo]').val().trim(),
             CargaHoras: parseInt($('input[name=CargaHoras]').val()),
             Asignaturas: $('#Asignaturas').val() || []
         };
@@ -36,7 +39,8 @@
     window.editar = function (id) {
         $.get(`/gestion-escolar/docentes/obtener/${id}`, function (data) {
             for (const key in data) {
-                const field = $(`[name="${key}"]`);
+                let newKey = key.charAt(0).toUpperCase() + key.slice(1);
+                const field = $(`[name="${newKey}"]`);
                 if (field.length) field.val(data[key]);
             }
             $('#Asignaturas').val(data.asignaturas);

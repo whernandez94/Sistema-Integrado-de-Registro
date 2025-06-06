@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <input type="hidden" asp-for="Id" />
                     <div class="mb-3">
-                        <label asp-for="EstudianteId" class="form-label"></label>
+                        <label class="form-label">Estudiante</label>
                         <select asp-for="EstudianteId" class="form-control" required>
                             <option value="">Seleccione un estudiante</option>
                             @foreach (var item in ViewBag.Estudiantes)
@@ -22,7 +22,7 @@
                         <span asp-validation-for="EstudianteId" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="AsignaturaId" class="form-label"></label>
+                        <label class="form-label">Asignatura</label>
                         <select asp-for="AsignaturaId" class="form-control" required>
                             <option value="">Seleccione una asignatura</option>
                             @foreach (var item in ViewBag.Asignaturas)
@@ -33,7 +33,7 @@
                         <span asp-validation-for="AsignaturaId" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="AnioEscolarId" class="form-label"></label>
+                        <label class="form-label">Año escolar</label>
                         <select asp-for="AnioEscolarId" class="form-control" required>
                             <option value="">Seleccione un año escolar</option>
                             @foreach (var item in ViewBag.AniosEscolares)

@@ -49,6 +49,8 @@ namespace Sistema_Integrado_de_Registro.Services
                 Telefono = docente.Telefono,
                 Correo = docente.Correo,
                 CargaHoras = docente.CargaHoras,
+                Codigo = docente.Codigo,
+                Rol = docente.Rol,
                 Asignaturas = docente.DocenteAsignaturas.Select(da => da.AsignaturaId).ToList()
             };
         }
@@ -71,9 +73,9 @@ namespace Sistema_Integrado_de_Registro.Services
                         Telefono = dto.Telefono,
                         Correo = dto.Correo,
                         CargaHoras = dto.CargaHoras,
-                        Codigo = dto.Codigo, // debes agregarlo al DTO
-                        Contrasena = BCrypt.Net.BCrypt.HashPassword(dto.Contrasena), // también agregar al DTO
-                        Rol = "Evaluador", // o "Administrador"
+                        Codigo = dto.Codigo,
+                        Contrasena = BCrypt.Net.BCrypt.HashPassword(dto.Contrasena),
+                        Rol = dto.Rol,
                     };
 
                     await _context.Docentes.AddAsync(docente);
@@ -93,6 +95,9 @@ namespace Sistema_Integrado_de_Registro.Services
                     docente.Telefono = dto.Telefono;
                     docente.Correo = dto.Correo;
                     docente.CargaHoras = dto.CargaHoras;
+                    docente.Codigo = dto.Codigo;
+                    docente.Contrasena = BCrypt.Net.BCrypt.HashPassword(dto.Contrasena);
+                    docente.Rol = dto.Rol;
 
                     // Eliminar relaciones existentes
                     _context.DocenteAsignaturas.RemoveRange(docente.DocenteAsignaturas);

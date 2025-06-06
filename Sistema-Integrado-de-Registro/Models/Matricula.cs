@@ -8,15 +8,15 @@ namespace Sistema_Integrado_de_Registro.Models
 
         [Required]
         public int EstudianteId { get; set; }
-        public Estudiante Estudiante { get; set; }
+        public Estudiante? Estudiante { get; set; }
 
         [Required]
         public int SeccionId { get; set; }
-        public Seccion Seccion { get; set; }
+        public Seccion? Seccion { get; set; }
 
         [Required]
         public int AnioEscolarId { get; set; }
-        public AnioEscolar AnioEscolar { get; set; }
+        public AnioEscolar? AnioEscolar { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Matrícula")]
@@ -28,6 +28,6 @@ namespace Sistema_Integrado_de_Registro.Models
         public bool Activa { get; set; } = true;
 
         [MaxLength(500)]
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 }
