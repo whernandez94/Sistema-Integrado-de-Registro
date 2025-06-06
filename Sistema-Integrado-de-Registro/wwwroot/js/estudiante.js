@@ -13,7 +13,7 @@
         });
 
         $.ajax({
-            url: '/estudiantes/Guardar',
+            url: '/gestion-escolar/estudiantes/guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -38,7 +38,7 @@
     });
 
     window.editar = function (id) {
-        $.get(`/estudiantes/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/estudiantes/obtener/${id}`, function (data) {
             for (const key in data) {
                 $(`[name="${key}"]`).val(data[key]);
             }
@@ -50,7 +50,7 @@
         if (!confirm("¿Deseas eliminar este estudiante?")) return;
 
         $.ajax({
-            url: `/estudiantes/Eliminar?id=${id}`,
+            url: `/gestion-escolar/estudiantes/eliminar/${id}`,
             method: 'DELETE',
             success: function (res) {
                 alert(res.message);
@@ -60,7 +60,7 @@
     };
 
     function cargarTabla() {
-        $.get('/estudiantes/ObtenerTodos', function (data) {
+        $.get('/gestion-escolar/estudiantes/obtener-todos', function (data) {
             let html = '';
             data.forEach(e => {
                 html += `
@@ -77,6 +77,38 @@
                     </tr>`;
             });
             $('#tablaEstudiantes tbody').html(html);
+            $(document).ready(function () {
+                $('#tablaEstudiantes').DataTable({
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "colvis": "Visibilidad",
+                            "print": "Imprimir"
+                        }
+                    }
+                });
+            });
         });
     }
 });

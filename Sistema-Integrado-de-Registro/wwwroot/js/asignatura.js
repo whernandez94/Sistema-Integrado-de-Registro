@@ -1,7 +1,35 @@
 ﻿$(document).ready(function () {
     let tabla = $('#tablaAsignaturas').DataTable({
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+                "copy": "Copiar",
+                "colvis": "Visibilidad",
+                "print": "Imprimir"
+            }
+        },
         ajax: {
-            url: '/asignaturas/ObtenerTodas',
+            url: '/gestion-escolar/asignaturas/obtener-todas',
             dataSrc: ''
         },
         columns: [
@@ -26,7 +54,7 @@
 
     $('#tablaAsignaturas').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        $.get(`/asignaturas/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/asignaturas/obtener/${id}`, function (data) {
             $('input[name=id]').val(data.id);
             $('input[name=nombre]').val(data.nombre);
             $('input[name=porcentajeInasistencia]').val(data.porcentajeInasistencia);
@@ -38,7 +66,7 @@
         const id = $(this).data('id');
         if (!confirm("¿Eliminar asignatura?")) return;
         $.ajax({
-            url: `/asignaturas/Eliminar?id=${id}`,
+            url: `/gestion-escolar/asignaturas/eliminar/${id}`,
             method: 'DELETE',
             success: function (res) {
                 mostrarMensaje(res.message, true);
@@ -56,7 +84,7 @@
         };
 
         $.ajax({
-            url: '/asignaturas/Guardar',
+            url: '/gestion-escolar/asignaturas/guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),

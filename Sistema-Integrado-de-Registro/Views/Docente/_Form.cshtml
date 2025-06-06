@@ -20,6 +20,16 @@
     </div>
 
     <div class="mb-3">
+        <label for="codigo" class="form-label">Codigo</label>
+        <input type="text" class="form-control" name="Codigo" value="@Model.Codigo" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="rol" class="form-label">Rol</label>
+        <input type="text" class="form-control" name="Rol" value="@Model.Rol" required />
+    </div>
+
+    <div class="mb-3">
         <label for="telefono" class="form-label">Teléfono</label>
         <input type="text" class="form-control" name="Telefono" value="@Model.Telefono" />
     </div>
@@ -30,14 +40,19 @@
     </div>
 
     <div class="mb-3">
+        <label for="contraseña" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" name="Contrasena" value="@Model.Contrasena" />
+    </div>
+
+    <div class="mb-3">
         <label for="cargaHoras" class="form-label">Carga de Horas</label>
         <input type="number" class="form-control" name="CargaHoras" value="@Model.CargaHoras" required />
     </div>
 
     <div class="mb-3">
         <label for="Asignaturas" class="form-label">Asignaturas que imparte</label>
-        <select name="Asignaturas" id="Asignaturas" class="form-select" multiple required>
-            @foreach (var asignatura in db.Asignaturas.ToList())
+        <select name="Asignaturas" id="Asignaturas" class="form-select" required>
+            @foreach (var asignatura in db.Asignaturas.Where(a => a.Activa).ToList())
             {
                 <option value="@asignatura.Id">@asignatura.Nombre</option>
             }

@@ -6,6 +6,8 @@ using Sistema_Integrado_de_Registro.Services;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/institucion")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class InstitutionController : Controller
     {
         private readonly IInstitutionService _service;
@@ -15,19 +17,21 @@ namespace Sistema_Integrado_de_Registro.Controllers
             _service = service;
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("obtener-todas")]
         public async Task<IActionResult> ObtenerTodas()
         {
             var instituciones = await _service.GetAllInstitutionsAsync();
             return Json(instituciones);
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public async Task<IActionResult> Guardar([FromBody] Institution model)
         {
             if (!ModelState.IsValid)
@@ -40,7 +44,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : BadRequest(result.Message);
         }
 
-        [HttpGet]
+        [HttpGet("obtener/{id:int}")]
         public async Task<IActionResult> Obtener(int id)
         {
             var institucion = await _service.GetInstitutionByIdAsync(id);
@@ -49,7 +53,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : NotFound();
         }
 
-        [HttpDelete]
+        [HttpDelete("eliminar/{id:int}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var result = await _service.DeleteInstitutionAsync(id);
@@ -58,7 +62,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : BadRequest(result.Message);
         }
 
-        [HttpGet]
+        [HttpGet("form/{id:int?}")]
         public async Task<IActionResult> Form(int? id)
         {
             Institution modelo;

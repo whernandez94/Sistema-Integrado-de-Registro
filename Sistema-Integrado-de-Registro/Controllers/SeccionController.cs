@@ -8,6 +8,8 @@ using Sistema_Integrado_de_Registro.Services;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/secciones")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class SeccionController : Controller
     {
         private readonly ISeccionService _service;
@@ -19,6 +21,8 @@ namespace Sistema_Integrado_de_Registro.Controllers
             _context = context;
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index()
         {
             ViewBag.Grados = _context.Grados.ToList();
@@ -27,19 +31,19 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 .Include(s => s.DocenteAsignaturas)
                 .ToList();
 
-            ViewBag.AniosEscolares = _context.AniosEscolares.ToList();
+            ViewBag.AniosEscolares = _context.AniosEscolares.Where(a => !a.Finalizado).ToList();
 
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("obtener-todas")]
         public async Task<IActionResult> ObtenerTodas()
         {
             var secciones = await _service.GetAllSeccionesAsync();
             return Json(secciones);
         }
 
-        [HttpGet]
+        [HttpGet("obtener-detalle/{id:int}")]
         public async Task<IActionResult> ObtenerDetalle(int id)
         {
             try
@@ -53,6 +57,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             }
         }
 
+        [HttpGet("imprimir-listado/{id:int}")]
         public async Task<IActionResult> ImprimirListado(int id)
         {
             try
@@ -66,7 +71,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public async Task<IActionResult> Guardar([FromBody] SeccionGuardarDto dto)
         {
             if (!ModelState.IsValid)
@@ -86,14 +91,14 @@ namespace Sistema_Integrado_de_Registro.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpDelete("eliminar/{id:int}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var result = await _service.DeleteSeccionAsync(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpGet]
+        [HttpGet("form/{id:int}")]
         public async Task<IActionResult> Form(int? id)
         {
             ViewBag.AniosEscolares = await _service.GetAniosEscolaresDisponiblesAsync();

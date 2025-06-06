@@ -27,7 +27,7 @@
                         <span asp-validation-for="Grado" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="AnioEscolarId" class="form-label"></label>
+                        <label class="form-label">Año escolar</label>
                         <select asp-for="AnioEscolarId" class="form-control" required>
                             <option value="">Seleccione un año escolar</option>
                             @foreach (var item in ViewBag.AniosEscolares)
@@ -38,7 +38,7 @@
                         <span asp-validation-for="AnioEscolarId" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="DocenteId" class="form-label"></label>
+                        <label class="form-label">Docente</label>
                         <select asp-for="DocenteId" class="form-control" required>
                             <option value="">Seleccione un docente guía</option>
                             @foreach (var item in ViewBag.Docentes)

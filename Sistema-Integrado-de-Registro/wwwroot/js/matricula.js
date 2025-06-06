@@ -1,50 +1,71 @@
 ﻿$(document).ready(function () {
     let table = $('#tblMatriculas').DataTable({
         responsive: true,
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+                "copy": "Copiar",
+                "colvis": "Visibilidad",
+                "print": "Imprimir"
+            }
+        },
         ajax: {
-            url: '/matricula-de-alumnos/ObtenerTodas',
+            url: '/gestion-escolar/matricula/obtener-todas',
             dataSrc: ''
         },
         columns: [
             {
-                data: 'estudiante',
+                data: 'nombreEstudiante',
                 render: function (data) {
                     if (!data) return '';
-                    return `${data.nombre} ${data.apellido}`;
-                }
-            },
-            {
-                data: 'estudiante',
-                render: function (data) {
-                    return data?.cedula ?? '';
+                    return `${data}`;
                 }
             },
             {
                 data: 'seccion',
                 render: function (data) {
-                    return data?.nombre ?? '';
-                }
-            },
-            {
-                data: 'seccion',
-                render: function (data) {
-                    return data?.grado ?? '';
+                    return data ?? '';
                 }
             },
             {
                 data: 'anioEscolar',
                 render: function (data) {
-                    return data?.anio ?? '';
+                    return data ?? '';
                 }
             },
             {
-                data: 'fechaMatricula',
+                data: 'numeroExpediente',
                 render: function (data) {
-                    if (!data) return '';
-                    return data.split('T')[0]; // formato yyyy-MM-dd
+                    return data ?? '';
                 }
             },
-            { data: 'numeroExpediente' },
+            {
+                data: 'fecha',
+                render: function (data) {
+                    if (!data) return '';
+                    return data;
+                }
+            },
             {
                 data: 'activa',
                 render: function (data) {
@@ -82,7 +103,7 @@
     $('#tblMatriculas').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
 
-        $.get(`/matricula-de-alumnos/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/matricula/obtener/${id}`, function (data) {
             if (data) {
                 $('#Id').val(data.id);
                 $('#EstudianteId').val(data.estudianteId);
@@ -114,18 +135,33 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/matricula-de-alumnos/Eliminar?id=${id}`,
+                    url: `/gestion-escolar/matricula/eliminar/${id}`,
                     type: 'DELETE',
                     success: function (response) {
                         if (response.success) {
-                            toastr.success(response.message);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Eliminado',
+                                text: response.message,
+                                confirmButtonText: 'Aceptar'
+                            });
                             table.ajax.reload();
                         } else {
-                            toastr.error(response.message);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Eliminado',
+                                text: response.message,
+                                confirmButtonText: 'Aceptar'
+                            });
                         }
                     },
                     error: function () {
-                        toastr.error('Error al eliminar la matrícula');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al eliminar la matrícula',
+                            confirmButtonText: 'Aceptar'
+                        });
                     }
                 });
             }
@@ -147,21 +183,36 @@
         };
 
         $.ajax({
-            url: '/matricula-de-alumnos/Guardar',
+            url: '/gestion-escolar/matricula/guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(matricula),
             success: function (response) {
                 if (response.success) {
-                    toastr.success(response.message);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Guardado exitoso',
+                        text: response.message,
+                        confirmButtonText: 'Aceptar'
+                    });
                     $('#modalForm').modal('hide');
                     table.ajax.reload();
                 } else {
-                    toastr.error(response.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message,
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
             },
             error: function () {
-                toastr.error('Error al guardar la matrícula');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al guardar la matrícula',
+                    confirmButtonText: 'Aceptar'
+                });
             }
         });
     });

@@ -2,16 +2,11 @@
     ViewData["Title"] = "Control de Asignaturas";
 }
 
-<div class="d-flex">
-    <div class="justify-content-end">
-        <button class="btn btn-success mb-3" id="btnNuevo">Nueva Asignatura</button>
-    </div>
-</div>
-
 <!-- DataTale -->
 <div class="card mb-4 shadow">
-    <div class="card-header py-3">
-        <h6 class="font-weight-bold text-primary m-0">Asignaturas registradas</h6>
+    <div class="card-header d-flex justify-content-between align-items-center py-3">
+        <h6 class="font-weight-bold text-primary m-0">@ViewData["Title"]</h6>
+        <button class="btn btn-sm btn-primary" id="btnNuevo"><i class="fas fa-plus"></i> Nueva Asignatura</button>
     </div>
     <div class="card-body">
         <div class="table-responsive">

@@ -1,8 +1,36 @@
 ﻿$(document).ready(function () {
     let table = $('#tblSecciones').DataTable({
         responsive: true,
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+                "copy": "Copiar",
+                "colvis": "Visibilidad",
+                "print": "Imprimir"
+            }
+        },
         ajax: {
-            url: '/secciones/ObtenerTodas',
+            url: '/gestion-escolar/secciones/obtener-todas',
             dataSrc: ''
         },
         columns: [
@@ -47,13 +75,13 @@
     // Ver detalle de sección
     $('#tblSecciones').on('click', '.btn-detalle', function () {
         const id = $(this).data('id');
-        window.open(`/secciones/ObtenerDetalle?id=${id}`, '_blank');
+        window.open(`/gestion-escolar/secciones/obtener-detalle/${id}`, '_blank');
     });
 
     // Imprimir listado de sección
     $('#tblSecciones').on('click', '.btn-imprimir', function () {
         const id = $(this).data('id');
-        window.open(`/secciones/ImprimirListado?id=${id}`, '_blank');
+        window.open(`/gestion-escolar/secciones/imprimir-listado/${id}`, '_blank');
     });
 
     // Eliminar sección
@@ -72,18 +100,33 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/secciones/Eliminar?id=${id}`,
+                    url: `/gestion-escolar/secciones/eliminar/${id}`,
                     type: 'DELETE',
                     success: function (response) {
                         if (response.success) {
-                            toastr.success(response.message);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Eliminado',
+                                text: response.message,
+                                confirmButtonText: 'Aceptar'
+                            });
                             table.ajax.reload();
                         } else {
-                            toastr.error(response.message);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                confirmButtonText: 'Aceptar'
+                            });
                         }
                     },
                     error: function () {
-                        toastr.error('Error al eliminar la sección');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al eliminar la sección',
+                            confirmButtonText: 'Aceptar'
+                        });
                     }
                 });
             }
@@ -103,21 +146,36 @@
         };
 
         $.ajax({
-            url: '/secciones/Guardar',
+            url: '/gestion-escolar/secciones/guardar',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(seccion),
             success: function (response) {
                 if (response.success) {
-                    toastr.success(response.message);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Guardado exitoso',
+                        text: response.message,
+                        confirmButtonText: 'Aceptar'
+                    });
                     $('#modalForm').modal('hide');
                     table.ajax.reload();
                 } else {
-                    toastr.error(response.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message,
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
             },
             error: function () {
-                toastr.error('Error al guardar la sección');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al guardar la sección',
+                    confirmButtonText: 'Aceptar'
+                });
             }
         });
     });

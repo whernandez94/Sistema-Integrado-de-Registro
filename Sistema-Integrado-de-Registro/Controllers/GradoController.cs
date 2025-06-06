@@ -6,6 +6,8 @@ using Sistema_Integrado_de_Registro.Services;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/grados")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class GradoController : Controller
     {
         private readonly IGradoService _gradoService;
@@ -15,26 +17,28 @@ namespace Sistema_Integrado_de_Registro.Controllers
             _gradoService = gradoService;
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("obtener-todos")]
         public IActionResult ObtenerTodos()
         {
             var grados = _gradoService.ObtenerTodos();
             return Json(grados);
         }
 
-        [HttpGet]
+        [HttpGet("obtener/{id:int}")]
         public IActionResult Obtener(int id)
         {
             var grado = _gradoService.ObtenerPorId(id);
             return Json(grado);
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public IActionResult Guardar([FromBody] Grado grado)
         {
             if (!ModelState.IsValid)
@@ -44,7 +48,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return Json(new { success = true, message = "Grado guardado correctamente" });
         }
 
-        [HttpDelete]
+        [HttpDelete("eliminar/{id:int}")]
         public IActionResult Eliminar(int id)
         {
             var result = _gradoService.Eliminar(id);

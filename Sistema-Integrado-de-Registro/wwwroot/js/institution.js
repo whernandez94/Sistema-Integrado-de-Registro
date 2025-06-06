@@ -1,7 +1,35 @@
 ﻿$(document).ready(function () {
     let tabla = $('#tablaInstituciones').DataTable({
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+                "copy": "Copiar",
+                "colvis": "Visibilidad",
+                "print": "Imprimir"
+            }
+        },
         ajax: {
-            url: '/institucion/ObtenerTodas',
+            url: '/gestion-escolar/institucion/obtener-todas',
             dataSrc: ''
         },
         columns: [
@@ -47,12 +75,17 @@
         }
 
         $.ajax({
-            url: '/institucion/Guardar',
+            url: '/gestion-escolar/institucion/guardar',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (res) {
-                mostrarMensaje(res.message, true);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado exitoso',
+                    text: res.message,
+                    confirmButtonText: 'Aceptar'
+                });
                 $('#formInstitucion')[0].reset();
                 $('#modalInstitucion').modal('hide');
                 tabla.ajax.reload(null, false);
@@ -65,7 +98,7 @@
 
     $('#tablaInstituciones').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        $.get(`/institucion/Obtener?id=${id}`, function (data) {
+        $.get(`/gestion-escolar/institucion/obtener/${id}`, function (data) {
             for (const key in data) {
                 const field = $(`[name="${key}"]`);
                 if (field.length) {
@@ -82,13 +115,28 @@
 
     $('#tablaInstituciones').on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (!confirm("¿Deseas eliminar este registro?")) return;
-        $.ajax({
-            url: `/institucion/Eliminar?id=${id}`,
-            method: 'DELETE',
-            success: function (res) {
-                mostrarMensaje(res.message, true);
-                tabla.ajax.reload(null, false);
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción eliminará la institución de forma permanente.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/gestion-escolar/institucion/eliminar/${id}`,
+                    method: 'DELETE',
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminado',
+                            text: res.message,
+                            confirmButtonText: 'Aceptar'
+                        });
+                        tabla.ajax.reload(null, false);
+                    }
+                });
             }
         });
     });
@@ -117,7 +165,6 @@
         mostrarErrores(lista);
     }
 
-    // Evento para abrir modal como nuevo registro
     $('#btnNuevo').on('click', function () {
         $('#formInstitucion')[0].reset();
         $('input[name=Id]').val('');

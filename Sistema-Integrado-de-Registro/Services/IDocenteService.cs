@@ -14,9 +14,13 @@
         public string Cedula { get; set; }
         public string NombreCompleto { get; set; }
         public string Telefono { get; set; }
+        public string Codigo { get; set; }
+
+        public string Rol { get; set; }
         public string Correo { get; set; }
         public int CargaHoras { get; set; }
         public string Asignaturas { get; set; }
+        public string Contrasena { get; set; }
     }
 
     public class DocenteDetailDto
@@ -26,9 +30,14 @@
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Telefono { get; set; }
+        public string Codigo { get; set; }
+
+        public string Rol { get; set; }
         public string Correo { get; set; }
         public int CargaHoras { get; set; }
         public List<int> Asignaturas { get; set; } = new();
+
+        public string Contrasena { get; set; }
     }
 
     public class DocenteSaveDto
@@ -37,12 +46,14 @@
         public string Cedula { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
+
+        public string Codigo { get; set; }
+
+        public string Rol { get; set; }
         public string Telefono { get; set; }
         public string Correo { get; set; }
         public int CargaHoras { get; set; }
         public List<int> Asignaturas { get; set; } = new();
-
-        public string Codigo { get; set; }
 
         public string Contrasena { get; set; }
     }

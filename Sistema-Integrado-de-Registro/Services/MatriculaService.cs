@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sistema_Integrado_de_Registro.Data;
+using Sistema_Integrado_de_Registro.DTO;
 using Sistema_Integrado_de_Registro.Models;
 
 namespace Sistema_Integrado_de_Registro.Services
@@ -15,24 +16,52 @@ namespace Sistema_Integrado_de_Registro.Services
             _logger = logger;
         }
 
-        public async Task<List<Matricula>> GetAllMatriculasAsync()
+        public async Task<List<MatriculaDetailsDto>> GetAllMatriculasAsync()
         {
             return await _context.Matriculas
                 .Include(m => m.Estudiante)
                 .Include(m => m.Seccion)
                 .Include(m => m.AnioEscolar)
                 .OrderByDescending(m => m.FechaMatricula)
+                .Select(m => new MatriculaDetailsDto
+                {
+                    Id = m.Id,
+                    NombreEstudiante = m.Estudiante.Nombre + " " + m.Estudiante.Apellido,
+                    Seccion = m.Seccion.Nombre,
+                    AnioEscolar = m.AnioEscolar.Anio,
+                    NumeroExpediente = m.NumeroExpediente,
+                    Fecha = m.FechaMatricula.ToString("dd/MM/yyyy"),
+                    Observaciones = m.Observaciones ?? "",
+                    Activa = m.Activa,
+                })
                 .ToListAsync();
         }
 
-        public async Task<Matricula?> GetMatriculaByIdAsync(int id)
+
+        public async Task<MatriculaEditDto?> GetMatriculaByIdAsync(int id)
         {
             return await _context.Matriculas
                 .Include(m => m.Estudiante)
                 .Include(m => m.Seccion)
                 .Include(m => m.AnioEscolar)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Where(m => m.Id == id)
+                .Select(m => new MatriculaEditDto
+                {
+                    Id = m.Id,
+                    EstudianteId = m.EstudianteId,
+                    NombreEstudiante = m.Estudiante.Nombre + " " + m.Estudiante.Apellido,
+                    SeccionId = m.SeccionId,
+                    NombreSeccion = m.Seccion.Nombre,
+                    AnioEscolarId = m.AnioEscolarId,
+                    NombreAnioEscolar = m.AnioEscolar.Anio,
+                    NumeroExpediente = m.NumeroExpediente,
+                    FechaMatricula = m.FechaMatricula,
+                    Activa = m.Activa,
+                    Observaciones = m.Observaciones
+                })
+                .FirstOrDefaultAsync();
         }
+
 
         public async Task<ServiceResult> SaveMatriculaAsync(Matricula matricula)
         {
@@ -58,13 +87,34 @@ namespace Sistema_Integrado_de_Registro.Services
                     matricula.NumeroExpediente = await GenerarNumeroExpedienteAsync();
                 }
 
+                var matriculaToSave = new Matricula
+                {
+                    Id = matricula.Id,
+                    EstudianteId = matricula.EstudianteId,
+                    SeccionId = matricula.SeccionId,
+                    AnioEscolarId = matricula.AnioEscolarId,
+                    FechaMatricula = matricula.FechaMatricula,
+                    NumeroExpediente = matricula.NumeroExpediente,
+                    Observaciones = matricula.Observaciones
+                };
+
                 if (matricula.Id == 0)
                 {
-                    await _context.Matriculas.AddAsync(matricula);
+                    await _context.Matriculas.AddAsync(matriculaToSave);
                 }
                 else
                 {
-                    _context.Matriculas.Update(matricula);
+                    var existente = await _context.Matriculas.FindAsync(matricula.Id);
+                    if (existente == null)
+                    {
+                        return new ServiceResult
+                        {
+                            Success = false,
+                            Message = "Matrícula no encontrada"
+                        };
+                    }
+
+                    _context.Entry(existente).CurrentValues.SetValues(matriculaToSave);
                 }
 
                 await _context.SaveChangesAsync();
@@ -72,7 +122,7 @@ namespace Sistema_Integrado_de_Registro.Services
                 return new ServiceResult
                 {
                     Success = true,
-                    Message = "Matrícula guardada correctamente"
+                    Message = "Matrícula guardada correctamente",
                 };
             }
             catch (Exception ex)

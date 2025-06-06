@@ -6,6 +6,8 @@ using Sistema_Integrado_de_Registro.Services;
 namespace Sistema_Integrado_de_Registro.Controllers
 {
     [Authorize]
+    [Route("gestion-escolar/estudiantes")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class EstudianteController : Controller
     {
         private readonly IEstudianteService _service;
@@ -15,16 +17,18 @@ namespace Sistema_Integrado_de_Registro.Controllers
             _service = service;
         }
 
+        [HttpGet("")]
+        [HttpGet("listado")]
         public IActionResult Index() => View();
 
-        [HttpGet]
+        [HttpGet("obtener-todos")]
         public async Task<IActionResult> ObtenerTodos()
         {
             var estudiantes = await _service.GetAllEstudiantesAsync();
             return Json(estudiantes);
         }
 
-        [HttpGet]
+        [HttpGet("obtener/{id:int}")]
         public async Task<IActionResult> Obtener(int id)
         {
             var estudiante = await _service.GetEstudianteByIdAsync(id);
@@ -33,7 +37,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : NotFound();
         }
 
-        [HttpPost]
+        [HttpPost("guardar")]
         public async Task<IActionResult> Guardar([FromBody] Estudiante estudiante)
         {
             if (!ModelState.IsValid)
@@ -46,7 +50,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 : BadRequest(result.Message);
         }
 
-        [HttpDelete]
+        [HttpDelete("eliminar/{id:int}")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var result = await _service.DeleteEstudianteAsync(id);
