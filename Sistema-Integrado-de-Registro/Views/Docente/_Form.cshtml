@@ -51,8 +51,8 @@
 
     <div class="mb-3">
         <label for="Asignaturas" class="form-label">Asignaturas que imparte</label>
-        <select name="Asignaturas" id="Asignaturas" class="form-select" multiple required>
-            @foreach (var asignatura in db.Asignaturas.ToList())
+        <select name="Asignaturas" id="Asignaturas" class="form-select" required>
+            @foreach (var asignatura in db.Asignaturas.Where(a => a.Activa).ToList())
             {
                 <option value="@asignatura.Id">@asignatura.Nombre</option>
             }

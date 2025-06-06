@@ -35,7 +35,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
                 .Include(s => s.AnioEscolar)
                 .ToList();
 
-            ViewBag.AniosEscolares = _context.AniosEscolares.ToList();
+            ViewBag.AniosEscolares = _context.AniosEscolares.Where(a => !a.Finalizado).ToList();
 
             return View();
         }

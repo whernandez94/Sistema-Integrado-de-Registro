@@ -24,7 +24,12 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (res) {
-                $('#mensajeDocente').html(`<div class="alert alert-success">${res.message}</div>`);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado exitoso',
+                    text: res.message,
+                    confirmButtonText: 'Aceptar'
+                });
                 $('#formDocente')[0].reset();
                 $('#modalDocente').modal('hide');
                 cargarTabla();
@@ -49,13 +54,28 @@
     };
 
     window.eliminar = function (id) {
-        if (!confirm("¿Deseas eliminar este docente?")) return;
-        $.ajax({
-            url: `/gestion-escolar/docentes/eliminar/${id}`,
-            method: 'DELETE',
-            success: function (res) {
-                alert(res.message);
-                cargarTabla();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción eliminará al docente de forma permanente.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/gestion-escolar/docentes/eliminar/${id}`,
+                    method: 'DELETE',
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminado',
+                            text: res.message,
+                            confirmButtonText: 'Aceptar'
+                        });
+                        cargarTabla();
+                    }
+                });
             }
         });
     };
@@ -79,6 +99,40 @@
                     </tr>`;
             });
             $('#tablaDocentes tbody').html(html);
+            // Inicializar DataTables después de cargar los datos
+            $(document).ready(function () {
+                $('#tablaDocentes').DataTable({
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "colvis": "Visibilidad",
+                            "print": "Imprimir"
+                        }
+                    }
+                    // Puedes agregar más opciones de configuración aquí
+                });
+            });
         });
     }
 });

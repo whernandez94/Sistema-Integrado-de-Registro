@@ -45,13 +45,13 @@ namespace Sistema_Integrado_de_Registro.Data
 
             modelBuilder.Entity<Matricula>()
                 .HasOne(m => m.Estudiante)
-                .WithMany() // asumiendo que no hay propiedad de navegación inversa
+                .WithMany()
                 .HasForeignKey(m => m.EstudianteId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Matricula>()
                 .HasOne(m => m.AnioEscolar)
-                .WithMany() // asumiendo lo mismo
+                .WithMany()
                 .HasForeignKey(m => m.AnioEscolarId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

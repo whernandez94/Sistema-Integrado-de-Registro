@@ -27,9 +27,9 @@ namespace Sistema_Integrado_de_Registro.Controllers
 
             ViewBag.Estudiantes = _context.Estudiantes.ToList();
 
-            ViewBag.Asignaturas = _context.Asignaturas.ToList();
+            ViewBag.Asignaturas = _context.Asignaturas.Where(a => a.Activa).ToList();
 
-            ViewBag.AniosEscolares = _context.AniosEscolares.ToList();
+            ViewBag.AniosEscolares = _context.AniosEscolares.Where(a => !a.Finalizado).ToList();
 
             ViewBag.Lapsos = new List<int> { 1, 2, 3 };
 
