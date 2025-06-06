@@ -16,7 +16,7 @@
                             <option value="">Seleccione un estudiante</option>
                             @foreach (var item in ViewBag.Estudiantes)
                             {
-                                <option value="@item.Id">@item.Nombre</option>
+                                <option value="@item.Id">@item.Nombre @item.Apellido</option>
                             }
                         </select>
                         <span asp-validation-for="EstudianteId" class="text-danger"></span>

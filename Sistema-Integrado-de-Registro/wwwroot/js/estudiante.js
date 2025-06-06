@@ -3,12 +3,16 @@
 
     $('#formEstudiante').on('submit', function (e) {
         e.preventDefault();
+        const formData = $('#formEstudiante').serializeArray();
         const data = {};
-        $('#formEstudiante').serializeArray().forEach(x => {
-            if (x.name === "Id") {
-                data[x.name] = parseInt(x.value) || 0;
+
+        formData.forEach(item => {
+            const fieldName = item.name.toLowerCase();
+
+            if (fieldName === 'id') {
+                data[item.name] = (item.value === '' || item.value === undefined) ? 0 : parseInt(item.value) || 0;
             } else {
-                data[x.name] = x.value;
+                data[item.name] = item.value;
             }
         });
 

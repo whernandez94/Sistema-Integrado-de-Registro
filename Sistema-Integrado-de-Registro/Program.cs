@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Sistema_Integrado_de_Registro.Data;
 using Sistema_Integrado_de_Registro.Services;
+using Sistema_Integrado_de_Registro.Utils;
 
 namespace Sistema_Integrado_de_Registro
 {
@@ -40,9 +43,31 @@ namespace Sistema_Integrado_de_Registro
 
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    DataSeeder.Initialize(services);
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError("Datos agregados a la tabla asignatura y docente");
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "Ocurrió un error al sembrar la base de datos");
+                }
+            }
+
             // Middleware
             if (!app.Environment.IsDevelopment())
             {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    context.Database.Migrate();
+                    DataSeeder.Initialize(scope.ServiceProvider);
+                }
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }

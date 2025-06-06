@@ -15,7 +15,7 @@
             Contrasena: $('input[name=Contrasena]').val().trim(),
             Codigo: $('input[name=Codigo]').val().trim(),
             CargaHoras: parseInt($('input[name=CargaHoras]').val()),
-            Asignaturas: $('#Asignaturas').val() || []
+            Asignaturas: [$('#Asignaturas').val()] || []
         };
 
         $.ajax({
