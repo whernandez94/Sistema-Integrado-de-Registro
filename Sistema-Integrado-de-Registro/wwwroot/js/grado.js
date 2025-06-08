@@ -57,31 +57,72 @@
 
     $('#tblGrados').on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        $.get(`/gestion-escolar/grados/obtener/${id}`, function (data) {
-            $('#Id').val(data.id);
-            $('#Nombre').val(data.nombre);
-            $('#Nivel').val(data.nivel);
-            $('#modalFormLabel').text('Editar Grado');
-            $('#modalForm').modal('show');
-        });
+        $.get(`/gestion-escolar/grados/obtener/${id}`)
+            .done(function (data) {
+                $('#Id').val(data.id);
+                $('#Nombre').val(data.nombre);
+                $('#Nivel').val(data.nivel);
+                $('#modalFormLabel').text('Editar Grado');
+                $('#modalForm').modal('show');
+            })
+            .fail(function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo cargar la información del grado',
+                    confirmButtonText: 'Aceptar'
+                });
+            });
     });
 
     $('#tblGrados').on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (confirm('¿Está seguro de eliminar este grado?')) {
-            $.ajax({
-                url: `/gestion-escolar/grados/eliminar/${id}`,
-                type: 'DELETE',
-                success: function (res) {
-                    if (res.success) {
-                        table.ajax.reload();
-                        alert(res.message);
-                    } else {
-                        alert('No se pudo eliminar.');
-                    }
-                }
-            });
-        }
+
+        Swal.fire({
+            title: '¿Está seguro de eliminar este grado?',
+            text: "Esta acción no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/gestion-escolar/grados/eliminar/${id}`,
+                    type: 'DELETE'
+                })
+                    .done(function (res) {
+                        if (res.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Éxito',
+                                text: res.message,
+                                confirmButtonText: 'Aceptar',
+                                timer: 2000,
+                                timerProgressBar: true
+                            });
+                            table.ajax.reload();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: res.message || 'No se pudo eliminar el grado',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    })
+                    .fail(function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al intentar eliminar el grado',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    });
+            }
+        });
     });
 
     $('#formGrado').submit(function (e) {
@@ -96,15 +137,37 @@
             url: '/gestion-escolar/grados/guardar',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(grado),
-            success: function (res) {
+            data: JSON.stringify(grado)
+        })
+            .done(function (res) {
                 if (res.success) {
-                    $('#modalForm').modal('hide');
-                    table.ajax.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: res.message || 'Grado guardado correctamente',
+                        confirmButtonText: 'Aceptar',
+                        timer: 2000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        $('#modalForm').modal('hide');
+                        table.ajax.reload();
+                    });
                 } else {
-                    alert('Error al guardar');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: res.message || 'Error al guardar el grado',
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
-            }
-        });
+            })
+            .fail(function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ocurrió un error al intentar guardar el grado',
+                    confirmButtonText: 'Aceptar'
+                });
+            });
     });
 });

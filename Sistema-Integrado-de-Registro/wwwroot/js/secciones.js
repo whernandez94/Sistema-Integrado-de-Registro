@@ -75,7 +75,7 @@
     // Ver detalle de sección
     $('#tblSecciones').on('click', '.btn-detalle', function () {
         const id = $(this).data('id');
-        window.open(`/gestion-escolar/secciones/obtener-detalle/${id}`, '_blank');
+        window.location.href = `/gestion-escolar/secciones/obtener-detalle/${id}`;
     });
 
     // Imprimir listado de sección

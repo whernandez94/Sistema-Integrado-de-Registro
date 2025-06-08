@@ -49,13 +49,14 @@ namespace Sistema_Integrado_de_Registro.Controllers
             try
             {
                 var seccion = await _service.GetSeccionWithEstudiantesAsync(id);
-                return Json(seccion);
+                return View("DetalleSeccion", seccion);
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
             }
         }
+
 
         [HttpGet("imprimir-listado/{id:int}")]
         public async Task<IActionResult> ImprimirListado(int id)

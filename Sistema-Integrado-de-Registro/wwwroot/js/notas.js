@@ -84,10 +84,16 @@
             return;
         }
 
-        $.get(`/gestion-escolar/notas/obtener-notas/${anioEscolarId}/${asignaturaId || ''}`, function (data) {
+        let url = `/gestion-escolar/notas/obtener-notas/${anioEscolarId}`;
+        if (asignaturaId) {
+            url += `/${asignaturaId}`;
+        }
+
+        $.get(url, function (data) {
             table.clear().rows.add(data).draw();
         });
     });
+
 
     // Abrir modal para nueva nota
     $('#btnNuevo').click(function () {
@@ -97,22 +103,35 @@
         $('#modalForm').modal('show');
     });
 
-    // Editar nota
     $('#tblNotas').on('click', '.btn-editar', function () {
-        const estudianteId = $(this).data('id');
-        const asignaturaId = $(this).data('asignatura');
-        const anioEscolarId = $('#anioEscolarId').val();
+        const notaId = $(this).data('id');
 
-        if (!anioEscolarId) {
-            toastr.warning('Primero filtre por año escolar');
+        if (!notaId) {
+            toastr.warning('No se pudo identificar la nota');
             return;
         }
 
-        // Aquí deberías implementar la lógica para cargar los datos de la nota específica
-        // Esto es un ejemplo simplificado
-        $('#modalFormLabel').text('Editar Nota');
-        $('#modalForm').modal('show');
+        $.ajax({
+            url: `/gestion-escolar/notas/obtener/${notaId}`,
+            method: 'GET',
+            success: function (data) {
+                $('#modalFormLabel').text('Editar Nota');
+
+                $('#formNota input[name="Id"]').val(data.id);
+                $('#formNota select[name="EstudianteId"]').val(data.estudianteId);
+                $('#formNota select[name="AsignaturaId"]').val(data.asignaturaId);
+                $('#formNota select[name="AnioEscolarId"]').val(7);
+                $('#formNota select[name="Lapso"]').val(data.lapso);
+                $('#formNota input[name="Valor"]').val(data.valor);
+
+                $('#modalForm').modal('show');
+            },
+            error: function () {
+                toastr.error('No se pudo cargar la nota.');
+            }
+        });
     });
+
 
     // Guardar nota
     $('#formNota').submit(function (e) {

@@ -67,6 +67,13 @@
                 }
             },
             {
+                data: 'observaciones',
+                render: function (data) {
+                    if (!data) return '';
+                    return data;
+                }
+            },
+            {
                 data: 'activa',
                 render: function (data) {
                     return data
@@ -199,11 +206,13 @@
                     table.ajax.reload();
                 } else {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
+                        icon: 'success',
+                        title: 'Guardado exitoso',
                         text: response.message,
                         confirmButtonText: 'Aceptar'
                     });
+                    $('#modalForm').modal('hide');
+                    table.ajax.reload();
                 }
             },
             error: function () {

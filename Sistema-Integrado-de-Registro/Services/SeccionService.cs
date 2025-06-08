@@ -81,7 +81,6 @@ namespace Sistema_Integrado_de_Registro.Services
         {
             try
             {
-                // Validar que no exista una sección con el mismo nombre en el mismo grado y año
                 var existe = await _context.Secciones
                     .AnyAsync(s => s.Nombre == seccion.Nombre &&
                                   s.Grado == seccion.Grado &&

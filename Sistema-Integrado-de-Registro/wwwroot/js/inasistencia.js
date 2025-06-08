@@ -43,20 +43,32 @@
                         ? '<span class="badge bg-danger">ALERTA</span>'
                         : '<span class="badge bg-success">Normal</span>';
                 }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return `
-                        <button class="btn btn-sm btn-primary btn-editar" data-id="${row.inasistenciaId}" data-asignatura="${row.inasistenciaId}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    `;
-                },
-                orderable: false
             }
         ]
     });
+
+    $(document).on('click', '.btn-editar', function () {
+        const id = $(this).data('id');
+
+        $.get(`/gestion-escolar/inasistencias/obtener/${id}`, function (data) {
+            $('#formInasistencia input[name="Id"]').val(data.id);
+            $('#formInasistencia select[name="EstudianteId"]').val(data.estudianteId);
+            $('#formInasistencia select[name="AsignaturaId"]').val(data.asignaturaId);
+            $('#formInasistencia select[name="AnioEscolarId"]').val(data.anioEscolarId);
+            $('#formInasistencia select[name="Lapso"]').val(data.lapso);
+            $('#formInasistencia input[name="Porcentaje"]').val(data.porcentaje);
+            $('#formInasistencia textarea[name="Observaciones"]').val(data.observaciones);
+
+            const porcentaje = $(`#formInasistencia select[name="AsignaturaId"] option:selected`).data('porcentaje');
+            $('#limiteInasistencia').text(`Límite permitido: ${porcentaje || 0}%`);
+
+            const modal = new bootstrap.Modal(document.getElementById('modalForm'));
+            modal.show();
+        }).fail(function () {
+            toastr.error('No se pudo cargar la inasistencia.');
+        });
+    });
+
 
     function renderPorcentaje(data) {
         if (data === null || data === undefined) return '-';
@@ -64,7 +76,6 @@
         return `<span class="${alerta ? 'text-danger fw-bold' : ''}">${data}%</span>`;
     }
 
-    // Cargar filtros
     $.get('/gestion-escolar/inasistencias/obtener-por-filtros', function (data) {
         $('#anioEscolarId').empty().append('<option value="">Seleccione un año</option>');
         $('#asignaturaId').empty().append('<option value="">Todas</option>');
@@ -84,7 +95,6 @@
         });
     });
 
-    // Filtrar
     $('#btnFiltrar').click(function () {
         const anioEscolarId = $('#anioEscolarId').val();
         const asignaturaId = $('#asignaturaId').val();
@@ -94,12 +104,18 @@
             return;
         }
 
-        $.get(`/gestion-escolar/inasistencias/obtener-todas/${anioEscolarId}/${asignaturaId || ''}`, function (data) {
+        let url = `/gestion-escolar/inasistencias/obtener-todas/${anioEscolarId}`;
+
+        if (asignaturaId) {
+            url += `/${asignaturaId}`;
+        }
+
+        $.get(url, function (data) {
             table.clear().rows.add(data).draw();
         });
     });
 
-    // Cambio de año escolar - cargar estudiantes
+
     $('#anioEscolarId').change(function () {
         const anioEscolarId = $(this).val();
         if (!anioEscolarId) return;
@@ -115,7 +131,6 @@
         });
     });
 
-    // Cambio de asignatura - actualizar límite
     $('#AsignaturaId').change(function () {
         const selectedOption = $(this).find('option:selected');
         const porcentajePermitido = selectedOption.data('porcentaje') || 0;

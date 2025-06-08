@@ -36,7 +36,7 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return View();
         }
 
-        [HttpGet("obtener-todas/{anioEscolarId:int}/{asignaturaId:int}")]
+        [HttpGet("obtener-todas/{anioEscolarId:int}/{asignaturaId:int?}")]
         public async Task<IActionResult> ObtenerInasistencias(int anioEscolarId, int? asignaturaId)
         {
             var inasistencias = await _service.GetInasistenciasConResumenAsync(anioEscolarId, asignaturaId);

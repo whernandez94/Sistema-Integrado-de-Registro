@@ -1,4 +1,7 @@
 ﻿$(document).ready(function () {
+    
+    var tablaDocentes;
+
     cargarTabla();
 
     $('#formDocente').on('submit', function (e) {
@@ -82,6 +85,10 @@
 
     function cargarTabla() {
         $.get('/gestion-escolar/docentes/obtener-todos', function (data) {
+            if ($.fn.DataTable.isDataTable('#tablaDocentes')) {
+                tablaDocentes.destroy();
+            }
+
             let html = '';
             data.forEach(d => {
                 html += `
@@ -99,39 +106,37 @@
                     </tr>`;
             });
             $('#tablaDocentes tbody').html(html);
-            // Inicializar DataTables después de cargar los datos
-            $(document).ready(function () {
-                $('#tablaDocentes').DataTable({
-                    language: {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ registros",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún dato disponible en esta tabla",
-                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix": "",
-                        "sSearch": "Buscar:",
-                        "sUrl": "",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        },
-                        "buttons": {
-                            "copy": "Copiar",
-                            "colvis": "Visibilidad",
-                            "print": "Imprimir"
-                        }
+
+            tablaDocentes = $('#tablaDocentes').DataTable({
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Visibilidad",
+                        "print": "Imprimir"
                     }
-                    // Puedes agregar más opciones de configuración aquí
-                });
+                },
+                destroy: true
             });
         });
     }
