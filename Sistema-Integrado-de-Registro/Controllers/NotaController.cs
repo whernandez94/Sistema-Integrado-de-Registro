@@ -36,7 +36,8 @@ namespace Sistema_Integrado_de_Registro.Controllers
             return View();
         }
 
-        [HttpGet("obtener-notas/{anioEscolarId:int}/{asignaturaId:int}")]
+        [HttpGet("obtener-notas/{anioEscolarId:int}")]
+        [HttpGet("obtener-notas/{anioEscolarId:int}/{asignaturaId?}")]
         public async Task<IActionResult> ObtenerNotas(int anioEscolarId, int? asignaturaId)
         {
             var notas = await _notaService.GetNotasConPromediosAsync(anioEscolarId, asignaturaId);

@@ -59,18 +59,54 @@
             $('input[name=nombre]').val(data.nombre);
             $('input[name=porcentajeInasistencia]').val(data.porcentajeInasistencia);
             $('#modalAsignatura').modal('show');
+        }).fail(function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo cargar la información de la asignatura',
+                confirmButtonText: 'Aceptar'
+            });
         });
     });
 
     $('#tablaAsignaturas').on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (!confirm("¿Eliminar asignatura?")) return;
-        $.ajax({
-            url: `/gestion-escolar/asignaturas/eliminar/${id}`,
-            method: 'DELETE',
-            success: function (res) {
-                mostrarMensaje(res.message, true);
-                tabla.ajax.reload();
+
+        Swal.fire({
+            title: '¿Eliminar asignatura?',
+            text: "Esta acción no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/gestion-escolar/asignaturas/eliminar/${id}`,
+                    method: 'DELETE',
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: res.message,
+                            confirmButtonText: 'Aceptar',
+                            timer: 2000,
+                            timerProgressBar: true
+                        });
+                        tabla.ajax.reload();
+                        mostrarMensaje(res.message, true);
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo eliminar la asignatura',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
             }
         });
     });
@@ -89,9 +125,18 @@
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (res) {
-                mostrarMensaje(res.message, true);
-                $('#modalAsignatura').modal('hide');
-                tabla.ajax.reload();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: res.message,
+                    confirmButtonText: 'Aceptar',
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then(() => {
+                    $('#modalAsignatura').modal('hide');
+                    tabla.ajax.reload();
+                    mostrarMensaje(res.message, true);
+                });
             },
             error: function (xhr) {
                 let errores = [];
@@ -100,6 +145,14 @@
                     if (res[key].errors)
                         res[key].errors.forEach(err => errores.push(err.errorMessage));
                 }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    html: `<ul>${errores.map(e => `<li>${e}</li>`).join('')}</ul>`,
+                    confirmButtonText: 'Aceptar'
+                });
+
                 mostrarErrores(errores);
             }
         });

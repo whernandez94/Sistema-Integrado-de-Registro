@@ -58,15 +58,17 @@ namespace Sistema_Integrado_de_Registro.Services
         {
             try
             {
-                var existe = await _context.Notas
-                    .AnyAsync(n => n.EstudianteId == nota.EstudianteId &&
-                                  n.AsignaturaId == nota.AsignaturaId &&
-                                  n.AnioEscolarId == nota.AnioEscolarId &&
-                                  n.Lapso == nota.Lapso &&
-                                  n.Id != nota.Id);
+                var notaExistente = await _context.Notas
+                    .FirstOrDefaultAsync(n =>
+                        n.EstudianteId == nota.EstudianteId &&
+                        n.AsignaturaId == nota.AsignaturaId &&
+                        n.AnioEscolarId == nota.AnioEscolarId &&
+                        n.Lapso == nota.Lapso);
 
-                if (existe)
+                if (notaExistente != null && notaExistente.Id != nota.Id)
+                {
                     return new ServiceResult { Success = false, Message = "Ya existe una nota registrada para este estudiante, asignatura, año escolar y lapso" };
+                }
 
                 if (nota.Id == 0)
                 {
@@ -74,7 +76,13 @@ namespace Sistema_Integrado_de_Registro.Services
                 }
                 else
                 {
-                    _context.Notas.Update(nota);
+                    var notaEnDb = await _context.Notas.FindAsync(nota.Id);
+                    if (notaEnDb == null)
+                        return new ServiceResult { Success = false, Message = "La nota no existe" };
+
+                    notaEnDb.Valor = nota.Valor;
+                    notaEnDb.FechaRegistro = DateTime.Now;
+                    _context.Notas.Update(notaEnDb);
                 }
 
                 await _context.SaveChangesAsync();
@@ -85,6 +93,7 @@ namespace Sistema_Integrado_de_Registro.Services
                 return new ServiceResult { Success = false, Message = $"Error al guardar la nota: {ex.Message}" };
             }
         }
+
 
         public async Task<ServiceResult> DeleteNotaAsync(int id)
         {

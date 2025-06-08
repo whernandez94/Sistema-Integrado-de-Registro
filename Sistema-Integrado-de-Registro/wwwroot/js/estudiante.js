@@ -22,10 +22,18 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (res) {
-                alert(res.message);
-                $('#modalEstudiante').modal('hide');
-                $('#formEstudiante')[0].reset();
-                cargarTabla();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: res.message,
+                    confirmButtonText: 'Aceptar',
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then(() => {
+                    $('#modalEstudiante').modal('hide');
+                    $('#formEstudiante')[0].reset();
+                    cargarTabla();
+                });
             },
             error: function (xhr) {
                 if (xhr.responseJSON) {
@@ -33,9 +41,19 @@
                     for (const key in xhr.responseJSON) {
                         mensajes.push(xhr.responseJSON[key]);
                     }
-                    alert("Errores:\n" + mensajes.join('\n'));
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errores',
+                        html: mensajes.join('<br>'),
+                        confirmButtonText: 'Aceptar'
+                    });
                 } else {
-                    alert('Error al guardar el estudiante.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al guardar el estudiante.',
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
             }
         });
@@ -47,18 +65,52 @@
                 $(`[name="${key}"]`).val(data[key]);
             }
             $('#modalEstudiante').modal('show');
+        }).fail(function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo cargar la información del estudiante',
+                confirmButtonText: 'Aceptar'
+            });
         });
     };
 
     window.eliminar = function (id) {
-        if (!confirm("¿Deseas eliminar este estudiante?")) return;
-
-        $.ajax({
-            url: `/gestion-escolar/estudiantes/eliminar/${id}`,
-            method: 'DELETE',
-            success: function (res) {
-                alert(res.message);
-                cargarTabla();
+        Swal.fire({
+            title: '¿Eliminar estudiante?',
+            text: "¿Estás seguro de que deseas eliminar este estudiante?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/gestion-escolar/estudiantes/eliminar/${id}`,
+                    method: 'DELETE',
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: res.message,
+                            confirmButtonText: 'Aceptar',
+                            timer: 2000,
+                            timerProgressBar: true
+                        }).then(() => {
+                            cargarTabla();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo eliminar el estudiante',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
             }
         });
     };
@@ -112,6 +164,13 @@
                         }
                     }
                 });
+            });
+        }).fail(function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudieron cargar los estudiantes',
+                confirmButtonText: 'Aceptar'
             });
         });
     }
